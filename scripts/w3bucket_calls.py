@@ -9,7 +9,7 @@ from algosdk.encoding import decode_address, encode_address, encode_as_bytes
 from algosdk.transaction import PaymentTxn, AssetTransferTxn, AssetOptInTxn
 from algosdk.atomic_transaction_composer import TransactionWithSigner
 
-app_id=3326
+app_id=3369
 accounts = localnet.kmd.get_accounts()
 sender = accounts[0]
 mint_acct = accounts[1]
@@ -53,10 +53,16 @@ class W3Bucket:
 
     def set_bucket_edition_prices(self, edition_id, prices):
         try:
+            assets = [2991]
+            sp = self.client.get_suggested_params()
+            sp.flat_fee = True
+            sp.fee = 2000
             self.client.call(
                 "set_bucket_edition_prices",
+                suggested_params=sp,
                 edition_id=edition_id,
                 prices=prices,
+                foreign_assets=assets,
                 boxes=[(self.client.app_id,encode_as_bytes(edition_id))],
             )
             print(f"set bucket edition prices successfully")
@@ -84,21 +90,20 @@ class W3Bucket:
         try:
             sp = self.client.get_suggested_params()
             sp.flat_fee = True
-            sp.fee = 2000 * 4
-            ptxn = PaymentTxn(
-                sender=mint_acct.address,
-                sp=sp,
-                receiver=self.client.app_addr,
-                amt=10000,
-            )
-            #ptxn = AssetTransferTxn(
-            #    sender.address,
-            #    sp,
-            #    self.client.app_addr,
-            #    0,
-            #    110,
-            #    #2961,
+            sp.fee = 2000
+            #ptxn = PaymentTxn(
+            #    sender=mint_acct.address,
+            #    sp=sp,
+            #    receiver=self.client.app_addr,
+            #    amt=10000,
             #)
+            ptxn = AssetTransferTxn(
+                mint_acct.address,
+                sp,
+                self.client.app_addr,
+                1,
+                2991,
+            )
             mint_client = client.ApplicationClient(
                 client=localnet.get_algod_client(),
                 app=app,

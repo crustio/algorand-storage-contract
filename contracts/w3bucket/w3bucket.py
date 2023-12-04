@@ -437,6 +437,19 @@ def set_bucket_edition_prices(
             pt.Seq(
                 prices[i.load()].store_into(edition_price := EditionPrice()),
                 (asset_id := pt.abi.Uint64()).set(edition_price.currency),
+                # optin asset
+                pt.If(asset_id.get() != pt.Int(0))
+                .Then(
+                    pt.InnerTxnBuilder.Execute(
+                        {
+                            pt.TxnField.type_enum: pt.TxnType.AssetTransfer,
+                            pt.TxnField.xfer_asset: asset_id.get(),
+                            pt.TxnField.asset_amount: pt.Int(0),
+                            pt.TxnField.asset_receiver: pt.Global.current_application_address(),
+                            pt.TxnField.fee: pt.Int(0),
+                        }
+                    ),
+                ),
                 (price := pt.abi.Uint64()).set(edition_price.price),
                 (tmp_str := pt.abi.make(pt.abi.String)).decode(price_bytes.encode()),
                 price_bytes.set(
