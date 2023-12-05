@@ -53,10 +53,12 @@ class W3Bucket:
 
     def set_bucket_edition_prices(self, edition_id, prices):
         try:
-            assets = [2991]
+            assets = []
+            for price in prices:
+                assets.append(price[0])
             sp = self.client.get_suggested_params()
             sp.flat_fee = True
-            sp.fee = 2000
+            sp.fee = 1000 * len(assets)
             self.client.call(
                 "set_bucket_edition_prices",
                 suggested_params=sp,
@@ -84,6 +86,7 @@ class W3Bucket:
         self,
         mint_acct,
         edition_id,     # 1
+        asset_id,
         metadata_hash,  # 2laYvhe5tGliM1eZd5++yozl1JHA0mJDuv756hg3qdg=
         uri             # ipfs://bafkreihjhjvtbxzxnmlcwkkmeayb72xexxdloybjdj63g5pasfyc7zkvy4
     ):
@@ -91,19 +94,35 @@ class W3Bucket:
             sp = self.client.get_suggested_params()
             sp.flat_fee = True
             sp.fee = 2000
-            #ptxn = PaymentTxn(
-            #    sender=mint_acct.address,
-            #    sp=sp,
-            #    receiver=self.client.app_addr,
-            #    amt=10000,
-            #)
-            ptxn = AssetTransferTxn(
-                mint_acct.address,
-                sp,
-                self.client.app_addr,
-                1,
-                2991,
-            )
+            ptxn = ''
+            prices = self.client.call(
+                "get_bucket_edition_prices",
+                edition_id=edition_id,
+                boxes=[(self.client.app_id,encode_as_bytes(edition_id))],
+            ).return_value
+            asset_price = -1
+            for price in prices:
+                if price[0] == asset_id:
+                    asset_price = price[1]
+                    break
+            if asset_price == -1:
+                print(f'asset id:{asset_id} not supported')
+                return
+            if asset_id == 0:
+                ptxn = PaymentTxn(
+                    sender=mint_acct.address,
+                    sp=sp,
+                    receiver=self.client.app_addr,
+                    amt=asset_price,
+                )
+            else:
+                ptxn = AssetTransferTxn(
+                    mint_acct.address,
+                    sp,
+                    self.client.app_addr,
+                    asset_price,
+                    asset_id,
+                )
             mint_client = client.ApplicationClient(
                 client=localnet.get_algod_client(),
                 app=app,
@@ -163,6 +182,6 @@ if __name__ == '__main__':
         case 'get_bucket_edition_prices':
             w3bucket_client.get_bucket_edition_prices(int(args[1]))
         case 'mint':
-            w3bucket_client.mint(mint_acct, int(args[1]), args[2], args[3])
+            w3bucket_client.mint(mint_acct, int(args[1]), int(args[2]), args[3], args[4])
         case _:
             print("unexpected command")

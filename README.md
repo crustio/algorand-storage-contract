@@ -79,7 +79,7 @@ python examples:
 # Set prices of indicated bucket eidition 1,
 # there are two prices: '(0,10000)' indicates asset id equals to '0' which represents native token ALGO here and price 10000, '(1111,1)' indicates asset 1111 with price 1.
 ./scripts/w3bucket_calls.py set_bucket_edition_prices 1 '[(0,10000),(1111,1)]'
-# Mint a bucket NFT token, with edition=1, NFT metdata hash=2laYvhe5tGliM1eZd5++yozl1JHA0mJDuv756hg3qdg=, and asset url=ipfs://bafkreifz3txysww3dynwgfkh3zcbmgizv7ge5gju6ixoj5z2hirrcegvee
+# Mint a bucket NFT token, with edition=1, asset_id=1111, NFT metdata hash=2laYvhe5tGliM1eZd5++yozl1JHA0mJDuv756hg3qdg=, and asset url=ipfs://bafkreifz3txysww3dynwgfkh3zcbmgizv7ge5gju6ixoj5z2hirrcegvee
 # After minting, it will claim the minted bucket NFT token.
-./scripts/w3bucket_calls.py mint 1 '2laYvhe5tGliM1eZd5++yozl1JHA0mJDuv756hg3qdg=' 'ipfs://bafkreifz3txysww3dynwgfkh3zcbmgizv7ge5gju6ixoj5z2hirrcegvee'
+./scripts/w3bucket_calls.py mint 1 1111 '2laYvhe5tGliM1eZd5++yozl1JHA0mJDuv756hg3qdg=' 'ipfs://bafkreifz3txysww3dynwgfkh3zcbmgizv7ge5gju6ixoj5z2hirrcegvee'
 ```
