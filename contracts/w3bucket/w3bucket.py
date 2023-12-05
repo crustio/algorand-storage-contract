@@ -113,6 +113,13 @@ def is_valid(edition: BucketEditionParams) -> pt.Expr:
     return pt.Seq(
         (edition_id := pt.abi.Uint64()).set(edition.editionId),
         (max_supply := pt.abi.Uint16()).set(edition.maxMintableSupply),
+        pt.If(pt.Not(app.state.editions[edition_id].exists()))
+        .Then(
+            pt.Assert(
+                app.state.edition_num < app.state.edition_ids.elements,
+                comment="Edition number reaches the maximum"
+            )
+        ),
         pt.And(
             (edition_id.get() >= app.state.min_edition_id),
             pt.And(
@@ -136,16 +143,14 @@ def require_active_edition(edition_id: pt.abi.Uint64) -> pt.Expr:
 
 @pt.ABIReturnSubroutine
 def add_edition_id(edition_id: pt.abi.Uint64) -> pt.Expr:
-    i = pt.ScratchVar(pt.TealType.uint64)
     return pt.Seq(
-        pt.For(i.store(pt.Int(0)),i.load() < app.state.edition_num,i.store(i.load() + pt.Int(1))).Do(
+        pt.If(pt.Not(app.state.editions[edition_id].exists()))
+        .Then(
             pt.Seq(
-                app.state.edition_ids[i.load()].store_into(_edition_id := pt.abi.Uint64()),
-                pt.If(_edition_id.get() == edition_id.get()).Then(pt.Return()),
+                app.state.edition_ids[app.state.edition_num].set(edition_id),
+                app.state.edition_num.set(app.state.edition_num + pt.Int(1)),
             )
-        ),
-        app.state.edition_ids[app.state.edition_num].set(edition_id),
-        app.state.edition_num.set(app.state.edition_num + pt.Int(1)),
+        )
     )
 
 @pt.ABIReturnSubroutine
@@ -228,6 +233,7 @@ def set_bucket_edition(
         (max_supply := pt.abi.Uint16()).set(edition.maxMintableSupply),
         (capacity_in_GB := pt.abi.Uint16()).set(edition.capacityInGigabytes),
         (supply_minted := pt.abi.Uint16()).set(pt.Int(0)),
+        add_edition_id(edition_id),
         pt.If(app.state.editions[edition_id].exists())
         .Then(
             pt.Seq(
@@ -244,7 +250,6 @@ def set_bucket_edition(
             prices,
         ),
         app.state.editions[edition_id].set(edition_item),
-        add_edition_id(edition_id),
         pt.Log(
             pt.Concat(
                 pt.Bytes("$eventName$EditionUpdated$eventNameEnd$"),
@@ -264,24 +269,38 @@ def get_bucket_edition_ids(
     output: pt.abi.String
 ) -> pt.Expr:
     i = pt.ScratchVar(pt.TealType.uint64)
+    t1 = pt.ScratchVar(pt.TealType.bytes)
+    t2 = pt.ScratchVar(pt.TealType.bytes)
     return pt.Seq(
-        (res := pt.abi.make(pt.abi.String)).set(pt.Bytes(b'')),
+        t2.store(pt.Bytes(b'')),
         pt.For(i.store(pt.Int(0)), i.load() < app.state.edition_num, i.store(i.load() + pt.Int(1))).Do(
             pt.Seq(
                 app.state.edition_ids[i.load()].store_into(_id := pt.abi.Uint64()),
-                (tmp_array := pt.abi.make(pt.abi.String)).decode(res.encode()),
-                res.set(
-                    pt.Concat(
-                        int_2_string(_id),pt.Bytes(b','),
-                        tmp_array.get(),
-                    ),
+                pt.If(i.load() == pt.Int(0))
+                .Then(
+                    t1.store(
+                        pt.Concat(
+                            int_2_string(_id),
+                            t2.load()
+                        )
+                    )
+                )
+                .Else(
+                    t1.store(
+                        pt.Concat(
+                            int_2_string(_id),
+                            pt.Bytes(b','),
+                            t2.load()
+                        )
+                    )
                 ),
+                t2.store(t1.load())
             )
         ),
         output.set(
             pt.Concat(
                 pt.Bytes(b'['),
-                pt.Substring(res.get(),pt.Int(0),res.length()-pt.Int(1)),
+                t2.load(),
                 pt.Bytes(b']'))
         ),
     )
@@ -408,6 +427,8 @@ def set_bucket_edition_prices(
     prices: pt.abi.DynamicArray[EditionPrice]
 ) -> pt.Expr:
     i = pt.ScratchVar(pt.TealType.uint64)
+    t1 = pt.ScratchVar(pt.TealType.bytes)
+    t2 = pt.ScratchVar(pt.TealType.bytes)
     return pt.Seq(
         pt.Assert(
             require_active_edition(edition_id),
@@ -432,7 +453,7 @@ def set_bucket_edition_prices(
             prices_item,
         ),
         app.state.editions[edition_id].set(edition),
-        price_bytes.set(pt.Bytes(b'')),
+        t1.store(pt.Bytes(b'')),
         pt.For(i.store(pt.Int(0)), i.load() < prices.length(), i.store(i.load() + pt.Int(1))).Do(
             pt.Seq(
                 prices[i.load()].store_into(edition_price := EditionPrice()),
@@ -451,18 +472,19 @@ def set_bucket_edition_prices(
                     ),
                 ),
                 (price := pt.abi.Uint64()).set(edition_price.price),
-                (tmp_str := pt.abi.make(pt.abi.String)).decode(price_bytes.encode()),
-                price_bytes.set(
+                t2.store(
                     pt.Concat(
-                        tmp_str.get(),
+                        t1.load(),
                         pt.Itob(asset_id.get()),
                         pt.Bytes(b','),
                         pt.Itob(price.get()),
                         pt.Bytes(b';'),
                     )
-                )
+                ),
+                t1.store(t2.load()),
             )
         ),
+        price_bytes.set(t1.load()),
         pt.Log(
             pt.Concat(
                 pt.Bytes("$eventName$EditionPriceUpdated$eventNameEnd$"),

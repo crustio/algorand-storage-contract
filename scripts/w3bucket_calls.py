@@ -9,7 +9,7 @@ from algosdk.encoding import decode_address, encode_address, encode_as_bytes
 from algosdk.transaction import PaymentTxn, AssetTransferTxn, AssetOptInTxn
 from algosdk.atomic_transaction_composer import TransactionWithSigner
 
-app_id=3369
+app_id=3544
 accounts = localnet.kmd.get_accounts()
 sender = accounts[0]
 mint_acct = accounts[1]
@@ -32,13 +32,13 @@ class W3Bucket:
 
     def get_bucket_edition_ids(self, active):
         try:
-            editions = self.client.call(
+            edition_ids = self.client.call(
                 "get_bucket_edition_ids",
                 boxes=[(self.client.app_id,"edition_ids")],
             ).return_value
-            print(f"get bucket editions:{editions} successfully")
+            print(f"get bucket edition ids:{edition_ids} successfully")
         except Exception as e:
-            print(f"get bucket editions failed, error:{e}")
+            print(f"get bucket edition ids failed, error:{e}")
 
     def get_bucket_edition(self, edition_id):
         try:
