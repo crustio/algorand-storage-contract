@@ -219,13 +219,15 @@ def place_order(
         ),
         pt.Log(
             pt.Concat(
-                pt.Bytes("$event_name$PlaceOrder$event_name_end$"),
-                pt.Bytes("$customer$"),pt.Txn.sender(),pt.Bytes("$customer_end$"),
-                pt.Bytes("$merchant$"),merchant_addr.get(),pt.Bytes("$merchant_end$"),
-                pt.Bytes("$cid$"),cid.get(),pt.Bytes("$cid_end$"),
-                pt.Bytes("$size$"),pt.Itob(size.get()),pt.Bytes("$size_end$"),
-                pt.Bytes("$price$"),pt.Itob(price.load()),pt.Bytes("$price_end$"),
-                pt.Bytes("$is_permanent$"),pt.Itob(is_permanent.get()),pt.Bytes("$is_permanent_end$"),
+                pt.Bytes("$eventName$PlaceOrder$eventNameEnd$"),
+                pt.Bytes("$customer$"),pt.Txn.sender(),pt.Bytes("$customerEnd$"),
+                pt.Bytes("$merchant$"),merchant_addr.get(),pt.Bytes("$merchantEnd$"),
+                pt.Bytes("$cid$"),cid.get(),pt.Bytes("$cidEnd$"),
+                pt.Bytes("$size$"),pt.Itob(size.get()),pt.Bytes("$sizeEnd$"),
+                pt.Bytes("$price$"),pt.Itob(price.load()),pt.Bytes("$priceEnd$"),
+                pt.Bytes("$isPermanent$"),pt.Itob(is_permanent.get()),pt.Bytes("$isPermanentEnd$"),
+                pt.Bytes("$blockNumber$"),pt.Itob(pt.Txn.first_valid()),pt.Bytes("$blockNumberEnd$"),
+                pt.Bytes("$timestamp$"),pt.Itob(pt.Txn.first_valid_time()),pt.Bytes("$timestampEnd$"),
             )
         ),
     )

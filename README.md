@@ -17,7 +17,7 @@ or using [public gateways](https://docs.ipfs.tech/concepts/ipfs-gateway/#gateway
 
 Run following command to deploy storage order smart contract on Algorand local testnet.
 ```shell
-./scripts/storage_order_deploy.py
+python3 ./scripts/storage_order_deploy.py
 ```
 
 ### Usage
@@ -38,11 +38,11 @@ Functions for users:
 python examples:
 ```shell
 # Add merchant order node
-./scripts/storage_order_calls.py add_order_node R52TCLVXRADTZ3X7GTFD675RPIKCE7BR4ZVS2DA6R6YXM53UUCIIZIZN7Y
+python3 ./scripts/storage_order_calls.py add_order_node R52TCLVXRADTZ3X7GTFD675RPIKCE7BR4ZVS2DA6R6YXM53UUCIIZIZN7Y
 # Get order price with size:1024Bytes and permanently stored
-./scripts/storage_order_calls.py get_price 7788 True
+python3 ./scripts/storage_order_calls.py get_price 7788 True
 # Place order, this command will send a transaction with payment whose amount equals to the result of get_price command
-./scripts/storage_order_calls.py place_order bafkreihjhjvtbxzxnmlcwkkmeayb72xexxdloybjdj63g5pasfyc7zkvy4 7788 True
+python3 ./scripts/storage_order_calls.py place_order bafkreihjhjvtbxzxnmlcwkkmeayb72xexxdloybjdj63g5pasfyc7zkvy4 7788 True
 ```
 
 ## W3Bucket smart contract
@@ -53,7 +53,7 @@ This contract is for [CrustCloud](https://crustcloud.io/).
 
 Run following command to deploy W3Bucket smart contract on Algorand local testnet.
 ```shell
-./scripts/w3bucket_deploy.py
+python3 ./scripts/w3bucket_deploy.py
 ```
 
 ### Usage
@@ -75,11 +75,11 @@ Functions for users:
 python examples:
 ```shell
 # Set bucket edition with id=1, capacity=100GB and max minted number=255
-./scripts/w3bucket_calls.py set_bucket_edition 1 '(1,100,255)' 
+python3 ./scripts/w3bucket_calls.py set_bucket_edition 1 '(1,100,255)' 
 # Set prices of indicated bucket eidition 1,
 # there are two prices: '(0,10000)' indicates asset id equals to '0' which represents native token ALGO here and price 10000, '(1111,1)' indicates asset 1111 with price 1.
-./scripts/w3bucket_calls.py set_bucket_edition_prices 1 '[(0,10000),(1111,1)]'
+python3 ./scripts/w3bucket_calls.py set_bucket_edition_prices 1 '[(0,10000),(1111,1)]'
 # Mint a bucket NFT token, with edition=1, asset_id=1111, NFT metdata hash=2laYvhe5tGliM1eZd5++yozl1JHA0mJDuv756hg3qdg=, and asset url=ipfs://bafkreifz3txysww3dynwgfkh3zcbmgizv7ge5gju6ixoj5z2hirrcegvee
 # After minting, it will claim the minted bucket NFT token.
-./scripts/w3bucket_calls.py mint 1 1111 '2laYvhe5tGliM1eZd5++yozl1JHA0mJDuv756hg3qdg=' 'ipfs://bafkreifz3txysww3dynwgfkh3zcbmgizv7ge5gju6ixoj5z2hirrcegvee'
+python3 ./scripts/w3bucket_calls.py mint 1 1111 '2laYvhe5tGliM1eZd5++yozl1JHA0mJDuv756hg3qdg=' 'ipfs://bafkreifz3txysww3dynwgfkh3zcbmgizv7ge5gju6ixoj5z2hirrcegvee'
 ```
