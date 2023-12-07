@@ -9,7 +9,7 @@ from algosdk.encoding import decode_address, encode_address, encode_as_bytes
 from algosdk.transaction import PaymentTxn, AssetTransferTxn, AssetOptInTxn
 from algosdk.atomic_transaction_composer import TransactionWithSigner
 
-app_id=3544
+app_id=3592
 accounts = localnet.kmd.get_accounts()
 sender = accounts[0]
 mint_acct = accounts[1]
@@ -39,6 +39,28 @@ class W3Bucket:
             print(f"get bucket edition ids:{edition_ids} successfully")
         except Exception as e:
             print(f"get bucket edition ids failed, error:{e}")
+
+    def disable_bucket_edition(self, edition_id):
+        try:
+            self.client.call(
+                "disable_bucket_edition",
+                edition_id=edition_id,
+                boxes=[(self.client.app_id,encode_as_bytes(edition_id))],
+            ).return_value
+            print(f"disable bucket edition:{edition_id} successfully")
+        except Exception as e:
+            print(f"disable bucket edition:{edition_id} failed, error:{e}")
+
+    def enable_bucket_edition(self, edition_id):
+        try:
+            self.client.call(
+                "enable_bucket_edition",
+                edition_id=edition_id,
+                boxes=[(self.client.app_id,encode_as_bytes(edition_id))],
+            ).return_value
+            print(f"enable bucket edition:{edition_id} successfully")
+        except Exception as e:
+            print(f"enable bucket edition:{edition_id} failed, error:{e}")
 
     def get_bucket_edition(self, edition_id):
         try:
@@ -176,6 +198,10 @@ if __name__ == '__main__':
             w3bucket_client.get_bucket_edition_ids(args[1])
         case 'get_bucket_edition':
             w3bucket_client.get_bucket_edition(int(args[1]))
+        case 'enable_bucket_edition':
+            w3bucket_client.enable_bucket_edition(int(args[1]))
+        case 'disable_bucket_edition':
+            w3bucket_client.disable_bucket_edition(int(args[1]))
         case 'set_bucket_edition_prices':
             prices = literal_eval(args[2])
             w3bucket_client.set_bucket_edition_prices(int(args[1]), prices)

@@ -37,6 +37,7 @@ Functions for users:
 
 python examples:
 ```shell
+# Note: before you run following commands, set the appId in storage_order_calls.py
 # Add merchant order node
 python3 ./scripts/storage_order_calls.py add_order_node R52TCLVXRADTZ3X7GTFD675RPIKCE7BR4ZVS2DA6R6YXM53UUCIIZIZN7Y
 # Get order price with size:1024Bytes and permanently stored
@@ -74,6 +75,7 @@ Functions for users:
 
 python examples:
 ```shell
+# Note: before you run following commands, set the appId in w3bucket_calls.py
 # Set bucket edition with id=1, capacity=100GB and max minted number=255
 python3 ./scripts/w3bucket_calls.py set_bucket_edition 1 '(1,100,255)' 
 # Set prices of indicated bucket eidition 1,
