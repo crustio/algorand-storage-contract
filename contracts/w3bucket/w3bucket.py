@@ -15,22 +15,22 @@ MaxEditionNum = 30
 
 class BucketEditionParams(pt.abi.NamedTuple):
     editionId: pt.abi.Field[pt.abi.Uint64]
-    capacityInGigabytes: pt.abi.Field[pt.abi.Uint16]
-    maxMintableSupply: pt.abi.Field[pt.abi.Uint16]
+    capacityInGigabytes: pt.abi.Field[pt.abi.Uint64]
+    maxMintableSupply: pt.abi.Field[pt.abi.Uint64]
 
 class BucketEditionItem(pt.abi.NamedTuple):
-    maxMintableSupply: pt.abi.Field[pt.abi.Uint16]
-    capacityInGigabytes: pt.abi.Field[pt.abi.Uint16]
-    currentSupplyMinted: pt.abi.Field[pt.abi.Uint16]
+    maxMintableSupply: pt.abi.Field[pt.abi.Uint64]
+    capacityInGigabytes: pt.abi.Field[pt.abi.Uint64]
+    currentSupplyMinted: pt.abi.Field[pt.abi.Uint64]
     active: pt.abi.Field[pt.abi.Bool]
     prices: pt.abi.Field[PriceItem]
 
 class BucketEdition(pt.abi.NamedTuple):
     editionId: pt.abi.Field[pt.abi.Uint64]
     active: pt.abi.Field[pt.abi.Bool]
-    capacityInGigabytes: pt.abi.Field[pt.abi.Uint16]
-    maxMintableSupply: pt.abi.Field[pt.abi.Uint16]
-    currentSupplyMinted: pt.abi.Field[pt.abi.Uint16]
+    capacityInGigabytes: pt.abi.Field[pt.abi.Uint64]
+    maxMintableSupply: pt.abi.Field[pt.abi.Uint64]
+    currentSupplyMinted: pt.abi.Field[pt.abi.Uint64]
 
 class EditionPrice(pt.abi.NamedTuple):
     currency: pt.abi.Field[pt.abi.Uint64]
@@ -71,9 +71,9 @@ class W3BucketState:
             + (
                 BOX_FLAT_MIN_BALANCE
                 + (pt.abi.size_of(pt.abi.Uint64) * BOX_BYTE_MIN_BALANCE)
-                + (pt.abi.size_of(pt.abi.Uint16) * BOX_BYTE_MIN_BALANCE)
-                + (pt.abi.size_of(pt.abi.Uint16) * BOX_BYTE_MIN_BALANCE)
-                + (pt.abi.size_of(pt.abi.Uint16) * BOX_BYTE_MIN_BALANCE)
+                + (pt.abi.size_of(pt.abi.Uint64) * BOX_BYTE_MIN_BALANCE)
+                + (pt.abi.size_of(pt.abi.Uint64) * BOX_BYTE_MIN_BALANCE)
+                + (pt.abi.size_of(pt.abi.Uint64) * BOX_BYTE_MIN_BALANCE)
                 + (pt.abi.size_of(pt.abi.Uint64) * BOX_BYTE_MIN_BALANCE)
                 + (pt.abi.size_of(PriceItem) * BOX_BYTE_MIN_BALANCE)
             )
@@ -112,7 +112,7 @@ def bootstrap(seed: pt.abi.PaymentTransaction) -> pt.Expr:
 def is_valid(edition: BucketEditionParams) -> pt.Expr:
     return pt.Seq(
         (edition_id := pt.abi.Uint64()).set(edition.editionId),
-        (max_supply := pt.abi.Uint16()).set(edition.maxMintableSupply),
+        (max_supply := pt.abi.Uint64()).set(edition.maxMintableSupply),
         pt.If(pt.Not(app.state.editions[edition_id].exists()))
         .Then(
             pt.Assert(
@@ -163,9 +163,9 @@ def edition_token_minted(edition_id: pt.abi.Uint64) -> pt.Expr:
         (item := BucketEditionItem()).decode(
             app.state.editions[edition_id].get()
         ),
-        (max_supply := pt.abi.Uint16()).set(item.maxMintableSupply),
-        (capacity_in_GB := pt.abi.Uint16()).set(item.capacityInGigabytes),
-        (supply_minted := pt.abi.Uint16()).set(item.currentSupplyMinted),
+        (max_supply := pt.abi.Uint64()).set(item.maxMintableSupply),
+        (capacity_in_GB := pt.abi.Uint64()).set(item.capacityInGigabytes),
+        (supply_minted := pt.abi.Uint64()).set(item.currentSupplyMinted),
         (active := pt.abi.Bool()).set(item.active),
         (prices := pt.abi.make(PriceItem)).set(item.prices),
         supply_minted.set(supply_minted.get() + pt.Int(1)),
@@ -222,23 +222,24 @@ def int_2_string(decimal: pt.abi.Uint64) -> pt.Expr:
 def set_bucket_edition(
     edition: BucketEditionParams
 ) -> pt.Expr:
-    i = pt.ScratchVar(pt.TealType.uint64)
     prices = pt.abi.make(PriceItem)
+    i = pt.ScratchVar(pt.TealType.uint64)
     return pt.Seq(
         pt.Assert(
             is_valid(edition),
             comment="Invalid bucket edition"
         ),
         (edition_id := pt.abi.Uint64()).set(edition.editionId),
-        (max_supply := pt.abi.Uint16()).set(edition.maxMintableSupply),
-        (capacity_in_GB := pt.abi.Uint16()).set(edition.capacityInGigabytes),
-        (supply_minted := pt.abi.Uint16()).set(pt.Int(0)),
+        (max_supply := pt.abi.Uint64()).set(edition.maxMintableSupply),
+        (capacity_in_GB := pt.abi.Uint64()).set(edition.capacityInGigabytes),
+        (supply_minted := pt.abi.Uint64()).set(pt.Int(0)),
         add_edition_id(edition_id),
         pt.If(app.state.editions[edition_id].exists())
         .Then(
             pt.Seq(
                 (e := BucketEditionItem()).decode(app.state.editions[edition_id].get()),
                 supply_minted.set(e.currentSupplyMinted),
+                prices.set(e.prices),
             )
         ),
         (active := pt.abi.Bool()).set(TRUE),
@@ -332,7 +333,7 @@ def get_bucket_edition(
     return pt.Seq(
         (edition := BucketEditionItem()).decode(app.state.editions[edition_id].get()),
         (active := pt.abi.Bool()).set(edition.active),
-        (supply_minted := pt.abi.Uint16()).set(edition.currentSupplyMinted),
+        (supply_minted := pt.abi.Uint64()).set(edition.currentSupplyMinted),
         pt.If(
             pt.Or(
                 active.get(),
@@ -341,8 +342,8 @@ def get_bucket_edition(
         )
         .Then(
             pt.Seq(
-                (capacity_in_GB := pt.abi.Uint16()).set(edition.capacityInGigabytes),
-                (max_supply := pt.abi.Uint16()).set(edition.maxMintableSupply),
+                (capacity_in_GB := pt.abi.Uint64()).set(edition.capacityInGigabytes),
+                (max_supply := pt.abi.Uint64()).set(edition.maxMintableSupply),
                 (bucket_edition := BucketEdition()).set(
                     edition_id,
                     active,
@@ -363,9 +364,9 @@ def disable_bucket_edition(edition_id: pt.abi.Uint64) -> pt.Expr:
             comment=f"edition:{edition_id} not exist"
         ),
         (edition := BucketEditionItem()).decode(app.state.editions[edition_id].get()),
-        (max_supply := pt.abi.Uint16()).set(edition.maxMintableSupply),
-        (capacity_in_GB := pt.abi.Uint16()).set(edition.capacityInGigabytes),
-        (supply_minted := pt.abi.Uint16()).set(edition.currentSupplyMinted),
+        (max_supply := pt.abi.Uint64()).set(edition.maxMintableSupply),
+        (capacity_in_GB := pt.abi.Uint64()).set(edition.capacityInGigabytes),
+        (supply_minted := pt.abi.Uint64()).set(edition.currentSupplyMinted),
         (active := pt.abi.Bool()).set(FALSE),
         (prices_item := pt.abi.make(PriceItem)).set(edition.prices),
         edition.set(
@@ -396,9 +397,9 @@ def enable_bucket_edition(edition_id: pt.abi.Uint64) -> pt.Expr:
             comment=f"edition:{edition_id} not exist"
         ),
         (edition := BucketEditionItem()).decode(app.state.editions[edition_id].get()),
-        (max_supply := pt.abi.Uint16()).set(edition.maxMintableSupply),
-        (capacity_in_GB := pt.abi.Uint16()).set(edition.capacityInGigabytes),
-        (supply_minted := pt.abi.Uint16()).set(edition.currentSupplyMinted),
+        (max_supply := pt.abi.Uint64()).set(edition.maxMintableSupply),
+        (capacity_in_GB := pt.abi.Uint64()).set(edition.capacityInGigabytes),
+        (supply_minted := pt.abi.Uint64()).set(edition.currentSupplyMinted),
         (active := pt.abi.Bool()).set(TRUE),
         (prices_item := pt.abi.make(PriceItem)).set(edition.prices),
         edition.set(
@@ -440,9 +441,9 @@ def set_bucket_edition_prices(
             comment=f"prices:{price_bytes.length()} size exceed limit:{pt.abi.size_of(PriceItem)}"
         ),
         (edition := BucketEditionItem()).decode(app.state.editions[edition_id].get()),
-        (max_supply := pt.abi.Uint16()).set(edition.maxMintableSupply),
-        (capacity_in_GB := pt.abi.Uint16()).set(edition.capacityInGigabytes),
-        (supply_minted := pt.abi.Uint16()).set(edition.currentSupplyMinted),
+        (max_supply := pt.abi.Uint64()).set(edition.maxMintableSupply),
+        (capacity_in_GB := pt.abi.Uint64()).set(edition.capacityInGigabytes),
+        (supply_minted := pt.abi.Uint64()).set(edition.currentSupplyMinted),
         (active := pt.abi.Bool()).set(edition.active),
         (prices_item := pt.abi.make(PriceItem)).decode(prices.encode()),
         edition.set(
@@ -476,9 +477,9 @@ def set_bucket_edition_prices(
                     pt.Concat(
                         t1.load(),
                         pt.Itob(asset_id.get()),
-                        pt.Bytes(b','),
+                        pt.Bytes(b',,'),
                         pt.Itob(price.get()),
-                        pt.Bytes(b';'),
+                        pt.Bytes(b';;'),
                     )
                 ),
                 t1.store(t2.load()),
@@ -489,7 +490,7 @@ def set_bucket_edition_prices(
             pt.Concat(
                 pt.Bytes("$eventName$EditionPriceUpdated$eventNameEnd$"),
                 pt.Bytes("$editionId$"),pt.Itob(edition_id.get()),pt.Bytes("$editionIdEnd$"),
-                pt.Bytes("$prices$"),pt.Substring(price_bytes.get(),pt.Int(0),price_bytes.length()-pt.Int(1)),pt.Bytes("$pricesEnd$"),
+                pt.Bytes("$prices$"),pt.Substring(price_bytes.get(),pt.Int(0),price_bytes.length()-pt.Int(2)),pt.Bytes("$pricesEnd$"),
                 pt.Bytes("$blockNumber$"),pt.Itob(pt.Txn.first_valid()),pt.Bytes("$blockNumberEnd$"),
                 pt.Bytes("$timestamp$"),pt.Itob(pt.Txn.first_valid_time()),pt.Bytes("$timestampEnd$"),
                 pt.Bytes("$transactionIndex$"),pt.Itob(pt.Txn.group_index()),pt.Bytes("$transactionIndexEnd$"),
@@ -540,9 +541,9 @@ def mint(
             comment=f"edition:{edition_id} is not active or existed"
         ),
         (item := BucketEditionItem()).decode(app.state.editions[edition_id].get()),
-        (max_supply := pt.abi.Uint16()).set(item.maxMintableSupply),
-        (supply_minted := pt.abi.Uint16()).set(item.currentSupplyMinted),
-        (capacity_in_GB := pt.abi.Uint16()).set(item.capacityInGigabytes),
+        (max_supply := pt.abi.Uint64()).set(item.maxMintableSupply),
+        (supply_minted := pt.abi.Uint64()).set(item.currentSupplyMinted),
+        (capacity_in_GB := pt.abi.Uint64()).set(item.capacityInGigabytes),
         (price_bytes := pt.abi.make(PriceItem)).set(item.prices),
         pt.Assert(
             supply_minted.get() < max_supply.get(),

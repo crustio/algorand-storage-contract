@@ -1,5 +1,16 @@
 # Algorand smart contract
 
+## Configuration
+
+Configure .env file to set your enviroments:
+1. NETWORK: indicate network to run, must be **localnet**, **testnet** or **mainnet**.
+1. ALGOD_TOKEN: indicate algod token, default is **aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa**
+1. ALGOD_TESTNET_URL: indicate testnet algod url, default is **https://testnet-api.algonode.cloud**
+1. ALGOD_MAINNET_URL: indicate mainnet algod url, default is **https://mainnet-api.algonode.cloud**
+1. MNEMONIC: indicate mnemonic to deploy smart contract on **testnet** or **mainnet**.
+1. STORAGE_ORDER_APP_ID: indicate storage order application id.
+1. W3BUCKET_APP_ID: indicate W3Bucket application id.
+
 ## Storage order smart contract
 
 Storage order contract allows users to place storage order on Algorand. Crust storage order [listener](https://github.com/crustio/storage-contract-node) will monitor the order event and place order on Crust network.
@@ -15,10 +26,11 @@ or using [public gateways](https://docs.ipfs.tech/concepts/ipfs-gateway/#gateway
 
 ### Deployment
 
-Run following command to deploy storage order smart contract on Algorand local testnet.
+Run following command to deploy storage order smart contract on Algorand.
 ```shell
 python3 ./scripts/storage_order_deploy.py
 ```
+Note: the above command will output the deployed application ID and address, set the app_id in storage_order_calls.py
 
 ### Usage
 
@@ -52,10 +64,11 @@ This contract is for [CrustCloud](https://crustcloud.io/).
 
 ### Deployment
 
-Run following command to deploy W3Bucket smart contract on Algorand local testnet.
+Run following command to deploy W3Bucket smart contract on Algorand.
 ```shell
 python3 ./scripts/w3bucket_deploy.py
 ```
+Note: the above command will output the deployed application ID and address, set the app_id in w3bucket_calls.py
 
 ### Usage
 

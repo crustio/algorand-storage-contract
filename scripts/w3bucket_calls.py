@@ -4,15 +4,13 @@ sys.path.append('../')
 from ast import literal_eval
 from contracts.w3bucket.w3bucket import app, BucketEditionParams
 import pyteal as pt
-from beaker import localnet, client
+from beaker import client
 from algosdk.encoding import decode_address, encode_address, encode_as_bytes
 from algosdk.transaction import PaymentTxn, AssetTransferTxn, AssetOptInTxn
 from algosdk.atomic_transaction_composer import TransactionWithSigner
+from utils import get_acct_algod_from_args, network, get_param_or_exit
 
-app_id=3592
-accounts = localnet.kmd.get_accounts()
-sender = accounts[0]
-mint_acct = accounts[1]
+app_id = int(get_param_or_exit('W3BUCKET_APP_ID'))
 
 class W3Bucket:
     def __init__(self, client):
@@ -176,8 +174,11 @@ class W3Bucket:
             print(f"mint bucket edition prices failed, error:{e}")
 
 if __name__ == '__main__':
+    args = sys.argv[1:]
+    (accounts, sender, algod_client) = get_acct_algod_from_args()
+    mint_acct = sender
     app_client = client.ApplicationClient(
-        client=localnet.get_algod_client(),
+        client=algod_client,
         app=app,
         sender=sender.address,
         signer=sender.signer,
@@ -185,11 +186,11 @@ if __name__ == '__main__':
     )
 
     w3bucket_client = W3Bucket(app_client)
-    args = sys.argv[1:]
     if len(args) == 0:
         print("no command provided, please check help")
         sys.exit()
 
+    print(f"INFO: invoke application on {network}, application id:{app_id}")
     match args[0]:
         case 'set_bucket_edition':
             edition = literal_eval(args[2])

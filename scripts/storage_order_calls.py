@@ -2,12 +2,13 @@ import sys
 sys.path.append('../')
 
 from contracts.storage_order.storage_order import app
-from beaker import localnet, client
+from beaker import client
 from algosdk.encoding import decode_address, encode_address
 from algosdk.transaction import PaymentTxn
 from algosdk.atomic_transaction_composer import TransactionWithSigner
+from utils import get_acct_algod_from_args, network, get_param_or_exit
 
-app_id=3578
+app_id = int(get_param_or_exit('STORAGE_ORDER_APP_ID'))
 
 class StorageOrder:
     def __init__(self, client):
@@ -114,20 +115,22 @@ class StorageOrder:
 
 if __name__ == '__main__':
     args = sys.argv[1:]
-    accounts = localnet.kmd.get_accounts()
-    sender = accounts[0]
-    order_node = accounts[1]
+    (accounts, sender, algod_client) = get_acct_algod_from_args()
+    order_node = sender
+    if len(accounts) > 1:
+        order_node = accounts[1]
+    if len(args) == 0:
+        print("no command provided, please check help")
+        sys.exit()
     app_client = client.ApplicationClient(
-        client=localnet.get_algod_client(),
+        client=algod_client,
         app=app,
         sender=sender.address,
         signer=sender.signer,
         app_id=app_id,
     )
     storage_client = StorageOrder(app_client)
-    if len(args) == 0:
-        print("no command provided, please check help")
-        sys.exit()
+    print(f"INFO: invoke application on {network}, application id:{app_id}")
     match args[0]:
         case 'add_order_node':
             storage_client.add_order_node(args[1])

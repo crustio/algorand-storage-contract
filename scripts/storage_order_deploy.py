@@ -2,16 +2,15 @@ import sys
 sys.path.append('../')
 
 from contracts.storage_order.storage_order import app
-from beaker import localnet, client
+from beaker import client
 from algosdk.transaction import PaymentTxn
 from algosdk.atomic_transaction_composer import TransactionWithSigner
+from utils import get_acct_algod_from_args, network
 
-accounts = localnet.kmd.get_accounts()
-sender = accounts[0]
-order_node = accounts[1]
+(accounts, sender, algod_client) = get_acct_algod_from_args()
 
 app_client = client.ApplicationClient(
-    client=localnet.get_algod_client(),
+    client=algod_client,
     app=app,
     sender=sender.address,
     signer=sender.signer,
@@ -20,14 +19,13 @@ app_client = client.ApplicationClient(
 app_id, app_addr, txid = app_client.create()
 print(
     f"""
-Deployed app in txid {txid}
+Deployed app in txid {txid} to {network}
+Owner Address: {sender.address}
 App ID: {app_id}
 App Address: {app_addr}
 Deploy storage order smart contract successfully!
 """
 )
-
-print(localnet.get_algod_client())
 
 sp = app_client.get_suggested_params()
 sp.flat_fee = True
