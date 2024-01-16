@@ -1,0 +1,157 @@
+{
+    "name": "W3Bucket",
+    "methods": [
+        {
+            "name": "create",
+            "args": [],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "bootstrap",
+            "args": [
+                {
+                    "type": "pay",
+                    "name": "seed"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "set_bucket_edition",
+            "args": [
+                {
+                    "type": "(uint64,uint64,uint64)",
+                    "name": "edition"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "get_bucket_edition_ids",
+            "args": [],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "is_active_bucket_edition",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "edition_id"
+                }
+            ],
+            "returns": {
+                "type": "bool"
+            }
+        },
+        {
+            "name": "get_bucket_edition",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "edition_id"
+                }
+            ],
+            "returns": {
+                "type": "(uint64,bool,uint64,uint64,uint64)"
+            }
+        },
+        {
+            "name": "disable_bucket_edition",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "edition_id"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "enable_bucket_edition",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "edition_id"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "set_bucket_edition_prices",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "edition_id"
+                },
+                {
+                    "type": "(uint64,uint64)[]",
+                    "name": "prices"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "get_bucket_edition_prices",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "edition_id"
+                }
+            ],
+            "returns": {
+                "type": "(uint64,uint64)[]"
+            }
+        },
+        {
+            "name": "mint",
+            "args": [
+                {
+                    "type": "txn",
+                    "name": "seed"
+                },
+                {
+                    "type": "uint64",
+                    "name": "edition_id"
+                },
+                {
+                    "type": "string",
+                    "name": "metadata_hash"
+                },
+                {
+                    "type": "string",
+                    "name": "uri"
+                }
+            ],
+            "returns": {
+                "type": "uint64"
+            }
+        },
+        {
+            "name": "claim",
+            "args": [
+                {
+                    "type": "asset",
+                    "name": "token"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        }
+    ],
+    "networks": {},
+    "desc": "This is web3 bucket contract used to apply storage"
+}
