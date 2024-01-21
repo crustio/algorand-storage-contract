@@ -1,0 +1,886 @@
+#pragma version 8
+intcblock 0 1 32 1024
+bytecblock 0x6e6f64655f6e756d 0x 0x6e6f646573 0x616c676f5f7072696365 0x626173655f7072696365 0x627974655f7072696365 0x6372755f7072696365 0x736572766963655f72617465 0x73697a655f6c696d6974 0x151f7c75
+txna ApplicationArgs 0
+pushbytes 0x4c5c61ba // "create()void"
+==
+bnz main_l24
+txna ApplicationArgs 0
+pushbytes 0x6823e569 // "bootstrap(pay,uint64,uint64,uint64,uint64,uint64,uint64)void"
+==
+bnz main_l23
+txna ApplicationArgs 0
+pushbytes 0xb356f98a // "set_base_price(uint64)void"
+==
+bnz main_l22
+txna ApplicationArgs 0
+pushbytes 0x42d178e5 // "set_byte_price(uint64)void"
+==
+bnz main_l21
+txna ApplicationArgs 0
+pushbytes 0x9f378083 // "set_size_limit(uint64)void"
+==
+bnz main_l20
+txna ApplicationArgs 0
+pushbytes 0xb7146c45 // "set_service_rate(uint64)void"
+==
+bnz main_l19
+txna ApplicationArgs 0
+pushbytes 0x8f93847d // "set_algo_cru_price(uint64,uint64)void"
+==
+bnz main_l18
+txna ApplicationArgs 0
+pushbytes 0x3bd48153 // "add_order_node(address)void"
+==
+bnz main_l17
+txna ApplicationArgs 0
+pushbytes 0xc2f81980 // "remove_order_node(address)void"
+==
+bnz main_l16
+txna ApplicationArgs 0
+pushbytes 0xa94bfd08 // "get_random_order_node()address"
+==
+bnz main_l15
+txna ApplicationArgs 0
+pushbytes 0x7e8621eb // "get_price(uint64,bool)uint64"
+==
+bnz main_l14
+txna ApplicationArgs 0
+pushbytes 0x1a8d6a7f // "place_order(pay,account,string,uint64,bool)void"
+==
+bnz main_l13
+err
+main_l13:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub placeordercaster_26
+intc_1 // 1
+return
+main_l14:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub getpricecaster_25
+intc_1 // 1
+return
+main_l15:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub getrandomordernodecaster_24
+intc_1 // 1
+return
+main_l16:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub removeordernodecaster_23
+intc_1 // 1
+return
+main_l17:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub addordernodecaster_22
+intc_1 // 1
+return
+main_l18:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub setalgocrupricecaster_21
+intc_1 // 1
+return
+main_l19:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub setserviceratecaster_20
+intc_1 // 1
+return
+main_l20:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub setsizelimitcaster_19
+intc_1 // 1
+return
+main_l21:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub setbytepricecaster_18
+intc_1 // 1
+return
+main_l22:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub setbasepricecaster_17
+intc_1 // 1
+return
+main_l23:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub bootstrapcaster_16
+intc_1 // 1
+return
+main_l24:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+==
+&&
+assert
+callsub createcaster_15
+intc_1 // 1
+return
+
+// create
+create_0:
+proto 0 0
+bytec_3 // "algo_price"
+intc_0 // 0
+app_global_put
+bytec 4 // "base_price"
+intc_0 // 0
+app_global_put
+bytec 5 // "byte_price"
+intc_0 // 0
+app_global_put
+bytec 6 // "cru_price"
+intc_0 // 0
+app_global_put
+bytec_0 // "node_num"
+intc_0 // 0
+app_global_put
+bytec 7 // "service_rate"
+intc_0 // 0
+app_global_put
+bytec 8 // "size_limit"
+intc_0 // 0
+app_global_put
+retsub
+
+// bootstrap
+bootstrap_1:
+proto 7 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+frame_dig -7
+gtxns Receiver
+global CurrentApplicationAddress
+==
+// payment must be to app address
+assert
+frame_dig -7
+gtxns Amount
+pushint 386500 // 386500
+>=
+// payment must be for >= 386500
+assert
+bytec_2 // "nodes"
+pushint 960 // 960
+box_create
+pop
+bytec 4 // "base_price"
+frame_dig -6
+app_global_put
+bytec 5 // "byte_price"
+frame_dig -5
+app_global_put
+bytec 8 // "size_limit"
+frame_dig -4
+app_global_put
+bytec 7 // "service_rate"
+frame_dig -3
+app_global_put
+bytec_3 // "algo_price"
+frame_dig -2
+app_global_put
+bytec 6 // "cru_price"
+frame_dig -1
+app_global_put
+retsub
+
+// set_base_price
+setbaseprice_2:
+proto 1 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+bytec 4 // "base_price"
+frame_dig -1
+app_global_put
+retsub
+
+// set_byte_price
+setbyteprice_3:
+proto 1 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+bytec 5 // "byte_price"
+frame_dig -1
+app_global_put
+retsub
+
+// set_size_limit
+setsizelimit_4:
+proto 1 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+bytec 8 // "size_limit"
+frame_dig -1
+app_global_put
+retsub
+
+// set_service_rate
+setservicerate_5:
+proto 1 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+bytec 7 // "service_rate"
+frame_dig -1
+app_global_put
+retsub
+
+// set_algo_cru_price
+setalgocruprice_6:
+proto 2 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+bytec_3 // "algo_price"
+frame_dig -2
+app_global_put
+bytec 6 // "cru_price"
+frame_dig -1
+app_global_put
+retsub
+
+// add_order_node
+addordernode_7:
+proto 1 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+bytec_0 // "node_num"
+app_global_get
+pushint 30 // 30
+<
+// order node number has exceeded limit:(Int 30)
+assert
+frame_dig -1
+callsub addressexist_14
+!
+// address has been added
+assert
+bytec_2 // "nodes"
+intc_2 // 32
+bytec_0 // "node_num"
+app_global_get
+*
+frame_dig -1
+box_replace
+bytec_0 // "node_num"
+bytec_0 // "node_num"
+app_global_get
+intc_1 // 1
++
+app_global_put
+retsub
+
+// remove_order_node
+removeordernode_8:
+proto 1 0
+bytec_1 // ""
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+bytec_0 // "node_num"
+app_global_get
+intc_0 // 0
+>
+// no node to remove
+assert
+frame_dig -1
+callsub findposition_13
+store 1
+load 1
+bytec_0 // "node_num"
+app_global_get
+<
+// order node:address not exist
+assert
+bytec_0 // "node_num"
+app_global_get
+intc_1 // 1
+==
+bnz removeordernode_8_l2
+bytec_2 // "nodes"
+intc_2 // 32
+bytec_0 // "node_num"
+app_global_get
+intc_1 // 1
+-
+*
+intc_2 // 32
+box_extract
+frame_bury 0
+bytec_2 // "nodes"
+intc_2 // 32
+load 1
+*
+frame_dig 0
+box_replace
+bytec_0 // "node_num"
+bytec_0 // "node_num"
+app_global_get
+intc_1 // 1
+-
+app_global_put
+b removeordernode_8_l3
+removeordernode_8_l2:
+bytec_0 // "node_num"
+intc_0 // 0
+app_global_put
+removeordernode_8_l3:
+retsub
+
+// get_random_order_node
+getrandomordernode_9:
+proto 0 1
+bytec_1 // ""
+bytec_0 // "node_num"
+app_global_get
+intc_0 // 0
+>
+// no node to order
+assert
+bytec_2 // "nodes"
+intc_2 // 32
+global LatestTimestamp
+bytec_0 // "node_num"
+app_global_get
+%
+*
+intc_2 // 32
+box_extract
+frame_bury 0
+frame_dig 0
+len
+intc_2 // 32
+==
+assert
+retsub
+
+// get_price
+getprice_10:
+proto 2 1
+intc_0 // 0
+frame_dig -2
+frame_dig -1
+callsub getprice_12
+frame_bury 0
+retsub
+
+// place_order
+placeorder_11:
+proto 5 0
+bytec_1 // ""
+frame_dig -5
+gtxns Receiver
+global CurrentApplicationAddress
+==
+// payment must be to app address
+assert
+bytec_0 // "node_num"
+app_global_get
+intc_0 // 0
+>
+// no node to order
+assert
+frame_dig -4
+txnas Accounts
+frame_bury 0
+frame_dig 0
+len
+intc_2 // 32
+==
+assert
+frame_dig 0
+callsub addressexist_14
+// (frame_dig: dig_from = 0) is not an order node
+assert
+frame_dig -2
+bytec 8 // "size_limit"
+app_global_get
+<=
+// given file size:(frame_dig: dig_from = -2) exceeds size limit:ApplicationStateValue (utf8 bytes: "size_limit")
+assert
+frame_dig -2
+frame_dig -1
+callsub getprice_12
+store 3
+frame_dig -5
+gtxns Amount
+load 3
+>=
+// payment must be for >= 386500
+assert
+itxn_begin
+intc_1 // pay
+itxn_field TypeEnum
+load 3
+itxn_field Amount
+frame_dig 0
+itxn_field Receiver
+itxn_submit
+frame_dig -5
+gtxns Amount
+load 3
+-
+intc_0 // 0
+>
+bz placeorder_11_l2
+itxn_begin
+intc_1 // pay
+itxn_field TypeEnum
+frame_dig -5
+gtxns Amount
+load 3
+-
+itxn_field Amount
+txn Sender
+itxn_field Receiver
+itxn_submit
+placeorder_11_l2:
+pushbytes 0x246576656e744e616d6524506c6163654f72646572246576656e744e616d65456e6424 // "$eventName$PlaceOrder$eventNameEnd$"
+pushbytes 0x24637573746f6d657224 // "$customer$"
+concat
+txn Sender
+concat
+pushbytes 0x24637573746f6d6572456e6424 // "$customerEnd$"
+concat
+pushbytes 0x246d65726368616e7424 // "$merchant$"
+concat
+frame_dig 0
+concat
+pushbytes 0x246d65726368616e74456e6424 // "$merchantEnd$"
+concat
+pushbytes 0x2463696424 // "$cid$"
+concat
+frame_dig -3
+extract 2 0
+concat
+pushbytes 0x24636964456e6424 // "$cidEnd$"
+concat
+pushbytes 0x2473697a6524 // "$size$"
+concat
+frame_dig -2
+itob
+concat
+pushbytes 0x2473697a65456e6424 // "$sizeEnd$"
+concat
+pushbytes 0x24707269636524 // "$price$"
+concat
+load 3
+itob
+concat
+pushbytes 0x247072696365456e6424 // "$priceEnd$"
+concat
+pushbytes 0x2469735065726d616e656e7424 // "$isPermanent$"
+concat
+frame_dig -1
+itob
+concat
+pushbytes 0x2469735065726d616e656e74456e6424 // "$isPermanentEnd$"
+concat
+pushbytes 0x24626c6f636b4e756d62657224 // "$blockNumber$"
+concat
+txn FirstValid
+itob
+concat
+pushbytes 0x24626c6f636b4e756d626572456e6424 // "$blockNumberEnd$"
+concat
+pushbytes 0x2474696d657374616d7024 // "$timestamp$"
+concat
+txn FirstValidTime
+itob
+concat
+pushbytes 0x2474696d657374616d70456e6424 // "$timestampEnd$"
+concat
+log
+retsub
+
+// _get_price
+getprice_12:
+proto 2 1
+bytec 4 // "base_price"
+app_global_get
+frame_dig -2
+bytec 5 // "byte_price"
+app_global_get
+*
+intc_3 // 1024
+/
+intc_3 // 1024
+/
++
+bytec 7 // "service_rate"
+app_global_get
+pushint 100 // 100
++
+*
+pushint 100 // 100
+/
+bytec 6 // "cru_price"
+app_global_get
+*
+bytec_3 // "algo_price"
+app_global_get
+/
+pushint 1000000000000 // 1000000000000
+/
+store 2
+frame_dig -1
+bnz getprice_12_l2
+load 2
+b getprice_12_l3
+getprice_12_l2:
+load 2
+pushint 200 // 200
+*
+getprice_12_l3:
+retsub
+
+// _find_position
+findposition_13:
+proto 1 1
+intc_0 // 0
+bytec_0 // "node_num"
+app_global_get
+frame_bury 0
+intc_0 // 0
+store 0
+findposition_13_l1:
+load 0
+bytec_0 // "node_num"
+app_global_get
+<
+bz findposition_13_l5
+frame_dig -1
+bytec_2 // "nodes"
+intc_2 // 32
+load 0
+*
+intc_2 // 32
+box_extract
+==
+bnz findposition_13_l4
+load 0
+intc_1 // 1
++
+store 0
+b findposition_13_l1
+findposition_13_l4:
+load 0
+frame_bury 0
+findposition_13_l5:
+frame_dig 0
+frame_bury 0
+retsub
+
+// _address_exist
+addressexist_14:
+proto 1 1
+bytec_0 // "node_num"
+app_global_get
+frame_dig -1
+callsub findposition_13
+-
+retsub
+
+// create_caster
+createcaster_15:
+proto 0 0
+callsub create_0
+retsub
+
+// bootstrap_caster
+bootstrapcaster_16:
+proto 0 0
+intc_0 // 0
+dupn 6
+txna ApplicationArgs 1
+btoi
+frame_bury 1
+txna ApplicationArgs 2
+btoi
+frame_bury 2
+txna ApplicationArgs 3
+btoi
+frame_bury 3
+txna ApplicationArgs 4
+btoi
+frame_bury 4
+txna ApplicationArgs 5
+btoi
+frame_bury 5
+txna ApplicationArgs 6
+btoi
+frame_bury 6
+txn GroupIndex
+intc_1 // 1
+-
+frame_bury 0
+frame_dig 0
+gtxns TypeEnum
+intc_1 // pay
+==
+assert
+frame_dig 0
+frame_dig 1
+frame_dig 2
+frame_dig 3
+frame_dig 4
+frame_dig 5
+frame_dig 6
+callsub bootstrap_1
+retsub
+
+// set_base_price_caster
+setbasepricecaster_17:
+proto 0 0
+intc_0 // 0
+txna ApplicationArgs 1
+btoi
+frame_bury 0
+frame_dig 0
+callsub setbaseprice_2
+retsub
+
+// set_byte_price_caster
+setbytepricecaster_18:
+proto 0 0
+intc_0 // 0
+txna ApplicationArgs 1
+btoi
+frame_bury 0
+frame_dig 0
+callsub setbyteprice_3
+retsub
+
+// set_size_limit_caster
+setsizelimitcaster_19:
+proto 0 0
+intc_0 // 0
+txna ApplicationArgs 1
+btoi
+frame_bury 0
+frame_dig 0
+callsub setsizelimit_4
+retsub
+
+// set_service_rate_caster
+setserviceratecaster_20:
+proto 0 0
+intc_0 // 0
+txna ApplicationArgs 1
+btoi
+frame_bury 0
+frame_dig 0
+callsub setservicerate_5
+retsub
+
+// set_algo_cru_price_caster
+setalgocrupricecaster_21:
+proto 0 0
+intc_0 // 0
+dup
+txna ApplicationArgs 1
+btoi
+frame_bury 0
+txna ApplicationArgs 2
+btoi
+frame_bury 1
+frame_dig 0
+frame_dig 1
+callsub setalgocruprice_6
+retsub
+
+// add_order_node_caster
+addordernodecaster_22:
+proto 0 0
+bytec_1 // ""
+txna ApplicationArgs 1
+frame_bury 0
+frame_dig 0
+callsub addordernode_7
+retsub
+
+// remove_order_node_caster
+removeordernodecaster_23:
+proto 0 0
+bytec_1 // ""
+txna ApplicationArgs 1
+frame_bury 0
+frame_dig 0
+callsub removeordernode_8
+retsub
+
+// get_random_order_node_caster
+getrandomordernodecaster_24:
+proto 0 0
+bytec_1 // ""
+callsub getrandomordernode_9
+frame_bury 0
+bytec 9 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// get_price_caster
+getpricecaster_25:
+proto 0 0
+intc_0 // 0
+dupn 2
+txna ApplicationArgs 1
+btoi
+frame_bury 1
+txna ApplicationArgs 2
+intc_0 // 0
+pushint 8 // 8
+*
+getbit
+frame_bury 2
+frame_dig 1
+frame_dig 2
+callsub getprice_10
+frame_bury 0
+bytec 9 // 0x151f7c75
+frame_dig 0
+itob
+concat
+log
+retsub
+
+// place_order_caster
+placeordercaster_26:
+proto 0 0
+intc_0 // 0
+dup
+bytec_1 // ""
+intc_0 // 0
+dup
+txna ApplicationArgs 1
+intc_0 // 0
+getbyte
+frame_bury 1
+txna ApplicationArgs 2
+frame_bury 2
+txna ApplicationArgs 3
+btoi
+frame_bury 3
+txna ApplicationArgs 4
+intc_0 // 0
+pushint 8 // 8
+*
+getbit
+frame_bury 4
+txn GroupIndex
+intc_1 // 1
+-
+frame_bury 0
+frame_dig 0
+gtxns TypeEnum
+intc_1 // pay
+==
+assert
+frame_dig 0
+frame_dig 1
+frame_dig 2
+frame_dig 3
+frame_dig 4
+callsub placeorder_11
+retsub

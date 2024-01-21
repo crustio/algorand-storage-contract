@@ -1,0 +1,1790 @@
+#pragma version 8
+intcblock 0 1 16 8 192 1000000
+bytecblock 0x 0x00 0x65646974696f6e5f6e756d 0x2465646974696f6e496424 0x2465646974696f6e4964456e6424 0x24626c6f636b4e756d62657224 0x24626c6f636b4e756d626572456e6424 0x2474696d657374616d7024 0x2474696d657374616d70456e6424 0x247472616e73616374696f6e496e64657824 0x247472616e73616374696f6e496e646578456e6424 0x151f7c75 0x65646974696f6e5f696473 0x65646974696f6e5f6d61785f6d696e7461626c655f737570706c79 0x6d61785f65646974696f6e5f6964 0x6d696e5f65646974696f6e5f6964 0x30 0x246361706163697479496e47696761627974657324 0x246361706163697479496e476967616279746573456e6424 0x246576656e744e616d652445646974696f6e41637469766555706461746564246576656e744e616d65456e6424 0x2461637469766524 0x24616374697665456e6424
+txna ApplicationArgs 0
+pushbytes 0x4c5c61ba // "create()void"
+==
+bnz main_l24
+txna ApplicationArgs 0
+pushbytes 0xa4e8d164 // "bootstrap(pay)void"
+==
+bnz main_l23
+txna ApplicationArgs 0
+pushbytes 0x6b4fa281 // "set_bucket_edition((uint64,uint64,uint64))void"
+==
+bnz main_l22
+txna ApplicationArgs 0
+pushbytes 0x0494b207 // "get_bucket_edition_ids()string"
+==
+bnz main_l21
+txna ApplicationArgs 0
+pushbytes 0xaf53f646 // "is_active_bucket_edition(uint64)bool"
+==
+bnz main_l20
+txna ApplicationArgs 0
+pushbytes 0xc8ede712 // "get_bucket_edition(uint64)(uint64,bool,uint64,uint64,uint64)"
+==
+bnz main_l19
+txna ApplicationArgs 0
+pushbytes 0x478799ca // "disable_bucket_edition(uint64)void"
+==
+bnz main_l18
+txna ApplicationArgs 0
+pushbytes 0x6669dadf // "enable_bucket_edition(uint64)void"
+==
+bnz main_l17
+txna ApplicationArgs 0
+pushbytes 0xff66364f // "set_bucket_edition_prices(uint64,(uint64,uint64)[])void"
+==
+bnz main_l16
+txna ApplicationArgs 0
+pushbytes 0x6924c91c // "get_bucket_edition_prices(uint64)(uint64,uint64)[]"
+==
+bnz main_l15
+txna ApplicationArgs 0
+pushbytes 0x5b3590ad // "mint(txn,uint64,string,string)uint64"
+==
+bnz main_l14
+txna ApplicationArgs 0
+pushbytes 0xd907a7ea // "claim(asset)void"
+==
+bnz main_l13
+err
+main_l13:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub claimcaster_29
+intc_1 // 1
+return
+main_l14:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub mintcaster_28
+intc_1 // 1
+return
+main_l15:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub getbucketeditionpricescaster_27
+intc_1 // 1
+return
+main_l16:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub setbucketeditionpricescaster_26
+intc_1 // 1
+return
+main_l17:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub enablebucketeditioncaster_25
+intc_1 // 1
+return
+main_l18:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub disablebucketeditioncaster_24
+intc_1 // 1
+return
+main_l19:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub getbucketeditioncaster_23
+intc_1 // 1
+return
+main_l20:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub isactivebucketeditioncaster_22
+intc_1 // 1
+return
+main_l21:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub getbucketeditionidscaster_21
+intc_1 // 1
+return
+main_l22:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub setbucketeditioncaster_20
+intc_1 // 1
+return
+main_l23:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub bootstrapcaster_19
+intc_1 // 1
+return
+main_l24:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+==
+&&
+assert
+callsub createcaster_18
+intc_1 // 1
+return
+
+// create
+create_0:
+proto 0 0
+pushbytes 0x65646974696f6e5f6275636b65745f69645f666163746f72 // "edition_bucket_id_factor"
+intc 5 // 1000000
+app_global_put
+bytec 13 // "edition_max_mintable_supply"
+intc 5 // 1000000
+app_global_put
+bytec_2 // "edition_num"
+intc_0 // 0
+app_global_put
+bytec 14 // "max_edition_id"
+pushint 100 // 100
+app_global_put
+bytec 15 // "min_edition_id"
+intc_1 // 1
+app_global_put
+retsub
+
+// bootstrap
+bootstrap_1:
+proto 1 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+frame_dig -1
+gtxns Receiver
+global CurrentApplicationAddress
+==
+// payment must be to app address
+assert
+frame_dig -1
+gtxns Amount
+pushint 2289500 // 2289500
+>=
+// payment must be for >= 2289500
+assert
+bytec 12 // "edition_ids"
+pushint 240 // 240
+box_create
+pop
+retsub
+
+// is_valid
+isvalid_2:
+proto 1 1
+intc_0 // 0
+dup
+frame_dig -1
+intc_0 // 0
+extract_uint64
+frame_bury 0
+frame_dig -1
+intc_2 // 16
+extract_uint64
+frame_bury 1
+frame_dig 0
+itob
+box_len
+store 5
+store 4
+load 5
+!
+bz isvalid_2_l2
+bytec_2 // "edition_num"
+app_global_get
+pushint 30 // 30
+<
+// Edition number reaches the maximum
+assert
+isvalid_2_l2:
+frame_dig 0
+bytec 15 // "min_edition_id"
+app_global_get
+>=
+frame_dig 0
+bytec 14 // "max_edition_id"
+app_global_get
+<=
+frame_dig 1
+bytec 13 // "edition_max_mintable_supply"
+app_global_get
+<=
+&&
+&&
+frame_bury 0
+retsub
+
+// require_active_edition
+requireactiveedition_3:
+proto 1 1
+bytec_0 // ""
+intc_0 // 0
+frame_dig -1
+itob
+box_len
+store 30
+store 29
+load 30
+// edition:uint64 not exist
+assert
+frame_dig -1
+itob
+box_get
+store 32
+store 31
+load 32
+assert
+load 31
+frame_bury 0
+frame_dig 0
+intc 4 // 192
+getbit
+frame_bury 1
+frame_dig 1
+intc_1 // 1
+==
+frame_bury 0
+retsub
+
+// add_edition_id
+addeditionid_4:
+proto 1 0
+frame_dig -1
+itob
+box_len
+store 7
+store 6
+load 7
+!
+bz addeditionid_4_l2
+bytec 12 // "edition_ids"
+intc_3 // 8
+bytec_2 // "edition_num"
+app_global_get
+*
+frame_dig -1
+itob
+box_replace
+bytec_2 // "edition_num"
+bytec_2 // "edition_num"
+app_global_get
+intc_1 // 1
++
+app_global_put
+addeditionid_4_l2:
+retsub
+
+// edition_token_minted
+editiontokenminted_5:
+proto 1 0
+bytec_0 // ""
+intc_0 // 0
+dupn 3
+bytec_0 // ""
+intc_0 // 0
+dup
+bytec_0 // ""
+dup
+frame_dig -1
+itob
+box_len
+store 38
+store 37
+load 38
+// edition:uint64 not exist
+assert
+frame_dig -1
+itob
+box_get
+store 40
+store 39
+load 40
+assert
+load 39
+frame_bury 0
+frame_dig 0
+intc_0 // 0
+extract_uint64
+frame_bury 1
+frame_dig 0
+intc_3 // 8
+extract_uint64
+frame_bury 2
+frame_dig 0
+intc_2 // 16
+extract_uint64
+frame_bury 3
+frame_dig 0
+intc 4 // 192
+getbit
+frame_bury 4
+frame_dig 0
+extract 25 0
+frame_bury 5
+frame_dig 3
+intc_1 // 1
++
+frame_bury 3
+frame_dig 1
+itob
+frame_dig 2
+itob
+concat
+frame_dig 3
+itob
+concat
+bytec_1 // 0x00
+intc_0 // 0
+frame_dig 4
+setbit
+concat
+frame_dig 5
+concat
+frame_bury 0
+frame_dig -1
+itob
+box_del
+pop
+frame_dig -1
+itob
+frame_dig 0
+box_put
+retsub
+
+// find_price
+findprice_6:
+proto 2 1
+intc_0 // 0
+bytec_0 // ""
+intc_0 // 0
+dupn 2
+intc_0 // 0
+store 41
+findprice_6_l1:
+load 41
+frame_dig -1
+intc_0 // 0
+extract_uint16
+frame_bury 0
+frame_dig 0
+<
+bz findprice_6_l5
+frame_dig -1
+intc_2 // 16
+load 41
+*
+pushint 2 // 2
++
+intc_2 // 16
+extract3
+frame_bury 1
+frame_dig 1
+intc_0 // 0
+extract_uint64
+frame_bury 3
+frame_dig -2
+frame_dig 3
+==
+bnz findprice_6_l4
+load 41
+intc_1 // 1
++
+store 41
+b findprice_6_l1
+findprice_6_l4:
+load 41
+frame_bury 0
+retsub
+findprice_6_l5:
+frame_dig -1
+intc_0 // 0
+extract_uint16
+frame_bury 4
+frame_dig 4
+frame_bury 0
+retsub
+
+// int_2_string
+int2string_7:
+proto 1 1
+intc_0 // 0
+dup
+frame_dig -1
+intc_0 // 0
+==
+bnz int2string_7_l4
+frame_dig -1
+pushint 10 // 10
+/
+frame_bury 0
+frame_dig -1
+pushint 10 // 10
+%
+bytec 16 // 0x30
+btoi
++
+frame_bury 1
+frame_dig 0
+intc_0 // 0
+==
+bnz int2string_7_l3
+frame_dig 0
+callsub int2string_7
+frame_dig 1
+itob
+concat
+b int2string_7_l5
+int2string_7_l3:
+frame_dig 1
+itob
+b int2string_7_l5
+int2string_7_l4:
+bytec 16 // 0x30
+int2string_7_l5:
+frame_bury 0
+retsub
+
+// set_bucket_edition
+setbucketedition_8:
+proto 1 0
+bytec_0 // ""
+intc_0 // 0
+dupn 3
+bytec_0 // ""
+intc_0 // 0
+bytec_0 // ""
+intc_0 // 0
+dup
+bytec_0 // ""
+dup
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+frame_dig -1
+callsub isvalid_2
+// Invalid bucket edition
+assert
+frame_dig -1
+intc_0 // 0
+extract_uint64
+frame_bury 1
+frame_dig -1
+intc_2 // 16
+extract_uint64
+frame_bury 2
+frame_dig -1
+intc_3 // 8
+extract_uint64
+frame_bury 3
+intc_0 // 0
+frame_bury 4
+frame_dig 1
+callsub addeditionid_4
+frame_dig 1
+itob
+box_len
+store 1
+store 0
+load 1
+bz setbucketedition_8_l2
+frame_dig 1
+itob
+box_get
+store 3
+store 2
+load 3
+assert
+load 2
+frame_bury 5
+frame_dig 5
+intc_2 // 16
+extract_uint64
+frame_bury 4
+frame_dig 5
+extract 25 0
+frame_bury 0
+setbucketedition_8_l2:
+intc_1 // 1
+!
+!
+frame_bury 6
+frame_dig 2
+itob
+frame_dig 3
+itob
+concat
+frame_dig 4
+itob
+concat
+bytec_1 // 0x00
+intc_0 // 0
+frame_dig 6
+setbit
+concat
+frame_dig 0
+concat
+frame_bury 7
+frame_dig 1
+itob
+box_del
+pop
+frame_dig 1
+itob
+frame_dig 7
+box_put
+pushbytes 0x246576656e744e616d652445646974696f6e55706461746564246576656e744e616d65456e6424 // "$eventName$EditionUpdated$eventNameEnd$"
+bytec_3 // "$editionId$"
+concat
+frame_dig 1
+itob
+concat
+bytec 4 // "$editionIdEnd$"
+concat
+bytec 17 // "$capacityInGigabytes$"
+concat
+frame_dig 3
+itob
+concat
+bytec 18 // "$capacityInGigabytesEnd$"
+concat
+pushbytes 0x246d61784d696e7461626c65537570706c7924 // "$maxMintableSupply$"
+concat
+frame_dig 2
+itob
+concat
+pushbytes 0x246d61784d696e7461626c65537570706c79456e6424 // "$maxMintableSupplyEnd$"
+concat
+bytec 5 // "$blockNumber$"
+concat
+txn FirstValid
+itob
+concat
+bytec 6 // "$blockNumberEnd$"
+concat
+bytec 7 // "$timestamp$"
+concat
+txn FirstValidTime
+itob
+concat
+bytec 8 // "$timestampEnd$"
+concat
+bytec 9 // "$transactionIndex$"
+concat
+txn GroupIndex
+itob
+concat
+bytec 10 // "$transactionIndexEnd$"
+concat
+log
+retsub
+
+// get_bucket_edition_ids
+getbucketeditionids_9:
+proto 0 1
+bytec_0 // ""
+intc_0 // 0
+bytec_0 // 0x
+store 10
+intc_0 // 0
+store 8
+getbucketeditionids_9_l1:
+load 8
+bytec_2 // "edition_num"
+app_global_get
+<
+bz getbucketeditionids_9_l6
+bytec 12 // "edition_ids"
+intc_3 // 8
+load 8
+*
+intc_3 // 8
+box_extract
+btoi
+frame_bury 1
+load 8
+intc_0 // 0
+==
+bnz getbucketeditionids_9_l5
+frame_dig 1
+callsub int2string_7
+pushbytes 0x2c // 0x2c
+concat
+load 10
+concat
+store 9
+getbucketeditionids_9_l4:
+load 9
+store 10
+load 8
+intc_1 // 1
++
+store 8
+b getbucketeditionids_9_l1
+getbucketeditionids_9_l5:
+frame_dig 1
+callsub int2string_7
+load 10
+concat
+store 9
+b getbucketeditionids_9_l4
+getbucketeditionids_9_l6:
+pushbytes 0x5b // 0x5b
+load 10
+concat
+pushbytes 0x5d // 0x5d
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// is_active_bucket_edition
+isactivebucketedition_10:
+proto 1 1
+intc_0 // 0
+bytec_0 // ""
+intc_0 // 0
+frame_dig -1
+itob
+box_len
+store 12
+store 11
+load 12
+// edition:uint64 not exist
+assert
+frame_dig -1
+itob
+box_get
+store 14
+store 13
+load 14
+assert
+load 13
+frame_bury 1
+frame_dig 1
+intc 4 // 192
+getbit
+frame_bury 2
+frame_dig 2
+intc_1 // 1
+==
+!
+!
+frame_bury 0
+retsub
+
+// get_bucket_edition
+getbucketedition_11:
+proto 1 1
+bytec_0 // ""
+dup
+intc_0 // 0
+dupn 3
+bytec_0 // ""
+intc_0 // 0
+dup
+bytec_0 // ""
+dup
+frame_dig -1
+itob
+box_get
+store 16
+store 15
+load 16
+assert
+load 15
+frame_bury 1
+frame_dig 1
+intc 4 // 192
+getbit
+frame_bury 2
+frame_dig 1
+intc_2 // 16
+extract_uint64
+frame_bury 3
+frame_dig 2
+frame_dig 3
+intc_0 // 0
+>
+||
+bz getbucketedition_11_l2
+frame_dig 1
+intc_3 // 8
+extract_uint64
+frame_bury 4
+frame_dig 1
+intc_0 // 0
+extract_uint64
+frame_bury 5
+frame_dig -1
+itob
+bytec_1 // 0x00
+intc_0 // 0
+frame_dig 2
+setbit
+concat
+frame_dig 4
+itob
+concat
+frame_dig 5
+itob
+concat
+frame_dig 3
+itob
+concat
+frame_bury 6
+frame_dig 6
+frame_bury 0
+getbucketedition_11_l2:
+retsub
+
+// disable_bucket_edition
+disablebucketedition_12:
+proto 1 0
+bytec_0 // ""
+intc_0 // 0
+dupn 3
+bytec_0 // ""
+intc_0 // 0
+dup
+bytec_0 // ""
+dup
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+frame_dig -1
+itob
+box_len
+store 18
+store 17
+load 18
+// edition:uint64 not exist
+assert
+frame_dig -1
+itob
+box_get
+store 20
+store 19
+load 20
+assert
+load 19
+frame_bury 0
+frame_dig 0
+intc_0 // 0
+extract_uint64
+frame_bury 1
+frame_dig 0
+intc_3 // 8
+extract_uint64
+frame_bury 2
+frame_dig 0
+intc_2 // 16
+extract_uint64
+frame_bury 3
+intc_0 // 0
+!
+!
+frame_bury 4
+frame_dig 0
+extract 25 0
+frame_bury 5
+frame_dig 1
+itob
+frame_dig 2
+itob
+concat
+frame_dig 3
+itob
+concat
+bytec_1 // 0x00
+intc_0 // 0
+frame_dig 4
+setbit
+concat
+frame_dig 5
+concat
+frame_bury 0
+frame_dig -1
+itob
+box_del
+pop
+frame_dig -1
+itob
+frame_dig 0
+box_put
+bytec 19 // "$eventName$EditionActiveUpdated$eventNameEnd$"
+bytec_3 // "$editionId$"
+concat
+frame_dig -1
+itob
+concat
+bytec 4 // "$editionIdEnd$"
+concat
+bytec 20 // "$active$"
+concat
+frame_dig 4
+itob
+concat
+bytec 21 // "$activeEnd$"
+concat
+bytec 5 // "$blockNumber$"
+concat
+txn FirstValid
+itob
+concat
+bytec 6 // "$blockNumberEnd$"
+concat
+bytec 7 // "$timestamp$"
+concat
+txn FirstValidTime
+itob
+concat
+bytec 8 // "$timestampEnd$"
+concat
+bytec 9 // "$transactionIndex$"
+concat
+txn GroupIndex
+itob
+concat
+bytec 10 // "$transactionIndexEnd$"
+concat
+log
+retsub
+
+// enable_bucket_edition
+enablebucketedition_13:
+proto 1 0
+bytec_0 // ""
+intc_0 // 0
+dupn 3
+bytec_0 // ""
+intc_0 // 0
+dup
+bytec_0 // ""
+dup
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+frame_dig -1
+itob
+box_len
+store 22
+store 21
+load 22
+// edition:uint64 not exist
+assert
+frame_dig -1
+itob
+box_get
+store 24
+store 23
+load 24
+assert
+load 23
+frame_bury 0
+frame_dig 0
+intc_0 // 0
+extract_uint64
+frame_bury 1
+frame_dig 0
+intc_3 // 8
+extract_uint64
+frame_bury 2
+frame_dig 0
+intc_2 // 16
+extract_uint64
+frame_bury 3
+intc_1 // 1
+!
+!
+frame_bury 4
+frame_dig 0
+extract 25 0
+frame_bury 5
+frame_dig 1
+itob
+frame_dig 2
+itob
+concat
+frame_dig 3
+itob
+concat
+bytec_1 // 0x00
+intc_0 // 0
+frame_dig 4
+setbit
+concat
+frame_dig 5
+concat
+frame_bury 0
+frame_dig -1
+itob
+box_del
+pop
+frame_dig -1
+itob
+frame_dig 0
+box_put
+bytec 19 // "$eventName$EditionActiveUpdated$eventNameEnd$"
+bytec_3 // "$editionId$"
+concat
+frame_dig -1
+itob
+concat
+bytec 4 // "$editionIdEnd$"
+concat
+bytec 20 // "$active$"
+concat
+frame_dig 4
+itob
+concat
+bytec 21 // "$activeEnd$"
+concat
+bytec 5 // "$blockNumber$"
+concat
+txn FirstValid
+itob
+concat
+bytec 6 // "$blockNumberEnd$"
+concat
+bytec 7 // "$timestamp$"
+concat
+txn FirstValidTime
+itob
+concat
+bytec 8 // "$timestampEnd$"
+concat
+bytec 9 // "$transactionIndex$"
+concat
+txn GroupIndex
+itob
+concat
+bytec 10 // "$transactionIndexEnd$"
+concat
+log
+retsub
+
+// set_bucket_edition_prices
+setbucketeditionprices_14:
+proto 2 0
+bytec_0 // ""
+intc_0 // 0
+dup
+bytec_0 // ""
+intc_0 // 0
+dupn 3
+bytec_0 // ""
+intc_0 // 0
+dup
+bytec_0 // ""
+dup
+intc_0 // 0
+bytec_0 // ""
+intc_0 // 0
+dupn 3
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+frame_dig -2
+callsub requireactiveedition_3
+// edition:uint64 is not active or existed
+assert
+frame_dig -1
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+frame_dig 0
+intc_0 // 0
+extract_uint16
+frame_bury 1
+frame_dig 1
+pushint 128 // 128
+<
+// prices:(Seq (frame_bury (bury_to = 2) ((ExtractUint16 (frame_dig: dig_from = 0) (Int 0)))) (frame_dig: dig_from = 2)) size exceed limit:128
+assert
+frame_dig -2
+itob
+box_get
+store 28
+store 27
+load 28
+assert
+load 27
+frame_bury 3
+frame_dig 3
+intc_0 // 0
+extract_uint64
+frame_bury 4
+frame_dig 3
+intc_3 // 8
+extract_uint64
+frame_bury 5
+frame_dig 3
+intc_2 // 16
+extract_uint64
+frame_bury 6
+frame_dig 3
+intc 4 // 192
+getbit
+frame_bury 7
+frame_dig -1
+frame_bury 8
+frame_dig 4
+itob
+frame_dig 5
+itob
+concat
+frame_dig 6
+itob
+concat
+bytec_1 // 0x00
+intc_0 // 0
+frame_dig 7
+setbit
+concat
+frame_dig 8
+concat
+frame_bury 3
+frame_dig -2
+itob
+box_del
+pop
+frame_dig -2
+itob
+frame_dig 3
+box_put
+bytec_0 // 0x
+store 26
+intc_0 // 0
+store 25
+setbucketeditionprices_14_l1:
+load 25
+frame_dig -1
+intc_0 // 0
+extract_uint16
+frame_bury 13
+frame_dig 13
+<
+bz setbucketeditionprices_14_l5
+frame_dig -1
+intc_2 // 16
+load 25
+*
+pushint 2 // 2
++
+intc_2 // 16
+extract3
+frame_bury 14
+frame_dig 14
+intc_0 // 0
+extract_uint64
+frame_bury 16
+frame_dig 16
+intc_0 // 0
+!=
+bnz setbucketeditionprices_14_l4
+setbucketeditionprices_14_l3:
+frame_dig 14
+intc_3 // 8
+extract_uint64
+frame_bury 17
+load 26
+frame_dig 16
+itob
+concat
+pushbytes 0x2c2c // 0x2c2c
+concat
+frame_dig 17
+itob
+concat
+pushbytes 0x3b3b // 0x3b3b
+concat
+store 26
+load 25
+intc_1 // 1
++
+store 25
+b setbucketeditionprices_14_l1
+setbucketeditionprices_14_l4:
+itxn_begin
+pushint 4 // axfer
+itxn_field TypeEnum
+frame_dig 16
+itxn_field XferAsset
+intc_0 // 0
+itxn_field AssetAmount
+global CurrentApplicationAddress
+itxn_field AssetReceiver
+intc_0 // 0
+itxn_field Fee
+itxn_submit
+b setbucketeditionprices_14_l3
+setbucketeditionprices_14_l5:
+load 26
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+pushbytes 0x246576656e744e616d652445646974696f6e507269636555706461746564246576656e744e616d65456e6424 // "$eventName$EditionPriceUpdated$eventNameEnd$"
+bytec_3 // "$editionId$"
+concat
+frame_dig -2
+itob
+concat
+bytec 4 // "$editionIdEnd$"
+concat
+pushbytes 0x2470726963657324 // "$prices$"
+concat
+frame_dig 0
+extract 2 0
+intc_0 // 0
+frame_dig 0
+intc_0 // 0
+extract_uint16
+frame_bury 18
+frame_dig 18
+pushint 2 // 2
+-
+substring3
+concat
+pushbytes 0x24707269636573456e6424 // "$pricesEnd$"
+concat
+bytec 5 // "$blockNumber$"
+concat
+txn FirstValid
+itob
+concat
+bytec 6 // "$blockNumberEnd$"
+concat
+bytec 7 // "$timestamp$"
+concat
+txn FirstValidTime
+itob
+concat
+bytec 8 // "$timestampEnd$"
+concat
+bytec 9 // "$transactionIndex$"
+concat
+txn GroupIndex
+itob
+concat
+bytec 10 // "$transactionIndexEnd$"
+concat
+log
+retsub
+
+// get_bucket_edition_prices
+getbucketeditionprices_15:
+proto 1 1
+bytec_0 // ""
+dupn 2
+frame_dig -1
+callsub requireactiveedition_3
+// edition:uint64 is not active or existed
+assert
+frame_dig -1
+itob
+box_get
+store 34
+store 33
+load 34
+assert
+load 33
+frame_bury 1
+frame_dig 1
+extract 25 0
+frame_bury 2
+frame_dig 2
+frame_bury 0
+retsub
+
+// mint
+mint_16:
+proto 4 1
+intc_0 // 0
+bytec_0 // ""
+dup
+intc_0 // 0
+dupn 2
+bytec_0 // ""
+dupn 2
+intc_0 // 0
+dupn 2
+bytec_0 // ""
+intc_0 // 0
+dupn 4
+frame_dig -4
+gtxns Type
+frame_bury 1
+frame_dig 1
+len
+itob
+extract 6 0
+frame_dig 1
+concat
+frame_bury 1
+frame_dig 1
+extract 2 0
+pushbytes 0x706179 // 0x706179
+==
+frame_dig 1
+extract 2 0
+pushbytes 0x6178666572 // 0x6178666572
+==
+||
+// Transfer type must be pay or axfer
+assert
+frame_dig -4
+gtxns Receiver
+global CurrentApplicationAddress
+==
+frame_dig -4
+gtxns AssetReceiver
+global CurrentApplicationAddress
+==
+||
+// payment receiver:{seed.get().receiver()} must be to app address
+assert
+frame_dig -3
+callsub requireactiveedition_3
+// edition:uint64 is not active or existed
+assert
+frame_dig -3
+itob
+box_get
+store 36
+store 35
+load 36
+assert
+load 35
+frame_bury 2
+frame_dig 2
+intc_0 // 0
+extract_uint64
+frame_bury 3
+frame_dig 2
+intc_2 // 16
+extract_uint64
+frame_bury 4
+frame_dig 2
+intc_3 // 8
+extract_uint64
+frame_bury 5
+frame_dig 2
+extract 25 0
+frame_bury 6
+frame_dig 4
+frame_dig 3
+<
+// Exceed max mintable supply
+assert
+frame_dig 6
+frame_bury 8
+frame_dig -4
+gtxns XferAsset
+frame_bury 9
+frame_dig 9
+frame_dig 8
+callsub findprice_6
+frame_bury 10
+frame_dig 10
+frame_dig 8
+intc_0 // 0
+extract_uint16
+frame_bury 11
+frame_dig 11
+<
+// Invaid asset
+assert
+frame_dig 8
+intc_2 // 16
+frame_dig 10
+*
+pushint 2 // 2
++
+intc_2 // 16
+extract3
+frame_bury 12
+frame_dig 12
+intc_3 // 8
+extract_uint64
+frame_bury 14
+frame_dig 9
+intc_0 // 0
+==
+bnz mint_16_l3
+frame_dig -4
+gtxns AssetAmount
+frame_dig 14
+>=
+// Must send required price
+assert
+frame_dig -4
+gtxns AssetAmount
+frame_dig 14
+-
+frame_bury 16
+frame_dig 16
+intc_0 // 0
+>
+bz mint_16_l5
+itxn_begin
+pushint 4 // axfer
+itxn_field TypeEnum
+frame_dig 9
+itxn_field XferAsset
+frame_dig 16
+itxn_field AssetAmount
+txn Sender
+itxn_field AssetReceiver
+intc_0 // 0
+itxn_field Fee
+global CurrentApplicationAddress
+itxn_field AssetSender
+itxn_submit
+b mint_16_l5
+mint_16_l3:
+frame_dig -4
+gtxns Amount
+frame_dig 14
+>=
+// Must send required price
+assert
+frame_dig -4
+gtxns Amount
+frame_dig 14
+-
+frame_bury 15
+frame_dig 15
+intc_0 // 0
+>
+bz mint_16_l5
+itxn_begin
+intc_1 // pay
+itxn_field TypeEnum
+frame_dig 15
+itxn_field Amount
+txn Sender
+itxn_field Receiver
+itxn_submit
+mint_16_l5:
+itxn_begin
+pushint 3 // acfg
+itxn_field TypeEnum
+pushbytes 0x57334275636b6574 // 0x57334275636b6574
+itxn_field ConfigAssetName
+pushbytes 0x5733424b54 // 0x5733424b54
+itxn_field ConfigAssetUnitName
+frame_dig -2
+extract 2 0
+base64_decode StdEncoding
+itxn_field ConfigAssetMetadataHash
+intc_1 // 1
+itxn_field ConfigAssetTotal
+intc_0 // 0
+itxn_field ConfigAssetDecimals
+intc_0 // 0
+itxn_field ConfigAssetDefaultFrozen
+txn Sender
+itxn_field ConfigAssetReserve
+global CurrentApplicationAddress
+itxn_field ConfigAssetClawback
+frame_dig -1
+extract 2 0
+itxn_field ConfigAssetURL
+intc_0 // 0
+itxn_field Fee
+itxn_submit
+itxn CreatedAssetID
+frame_bury 17
+frame_dig 17
+frame_bury 0
+frame_dig -3
+callsub editiontokenminted_5
+pushbytes 0x246576656e744e616d65244275636b65744d696e746564246576656e744e616d65456e6424 // "$eventName$BucketMinted$eventNameEnd$"
+pushbytes 0x24746f24 // "$to$"
+concat
+txn Sender
+concat
+pushbytes 0x24746f456e6424 // "$toEnd$"
+concat
+bytec_3 // "$editionId$"
+concat
+frame_dig -3
+itob
+concat
+bytec 4 // "$editionIdEnd$"
+concat
+pushbytes 0x24746f6b656e496424 // "$tokenId$"
+concat
+frame_dig 17
+itob
+concat
+pushbytes 0x24746f6b656e4964456e6424 // "$tokenIdEnd$"
+concat
+pushbytes 0x24746f6b656e55524924 // "$tokenURI$"
+concat
+frame_dig -1
+extract 2 0
+concat
+pushbytes 0x24746f6b656e555249456e6424 // "$tokenURIEnd$"
+concat
+bytec 17 // "$capacityInGigabytes$"
+concat
+frame_dig 5
+itob
+concat
+bytec 18 // "$capacityInGigabytesEnd$"
+concat
+pushbytes 0x2463757272656e637924 // "$currency$"
+concat
+frame_dig 9
+itob
+concat
+pushbytes 0x2463757272656e6379456e6424 // "$currencyEnd$"
+concat
+pushbytes 0x24707269636524 // "$price$"
+concat
+frame_dig 14
+itob
+concat
+pushbytes 0x247072696365456e6424 // "$priceEnd$"
+concat
+bytec 5 // "$blockNumber$"
+concat
+txn FirstValid
+itob
+concat
+bytec 6 // "$blockNumberEnd$"
+concat
+bytec 7 // "$timestamp$"
+concat
+txn FirstValidTime
+itob
+concat
+bytec 8 // "$timestampEnd$"
+concat
+bytec 9 // "$transactionIndex$"
+concat
+txn GroupIndex
+itob
+concat
+bytec 10 // "$transactionIndexEnd$"
+concat
+log
+retsub
+
+// claim
+claim_17:
+proto 1 0
+global CurrentApplicationAddress
+frame_dig -1
+txnas Assets
+asset_holding_get AssetBalance
+store 42
+intc_1 // 1
+==
+// No such token minted or has been transferred
+assert
+frame_dig -1
+txnas Assets
+asset_params_get AssetReserve
+store 44
+store 43
+load 44
+// Invalid asset:(Txna Assets (frame_dig: dig_from = -1))
+assert
+load 43
+txn Sender
+==
+// Incorrect claim account
+assert
+itxn_begin
+pushint 4 // axfer
+itxn_field TypeEnum
+frame_dig -1
+txnas Assets
+itxn_field XferAsset
+intc_1 // 1
+itxn_field AssetAmount
+txn Sender
+itxn_field AssetReceiver
+global CurrentApplicationAddress
+itxn_field AssetSender
+pushint 1000 // 1000
+itxn_field Fee
+itxn_submit
+retsub
+
+// create_caster
+createcaster_18:
+proto 0 0
+callsub create_0
+retsub
+
+// bootstrap_caster
+bootstrapcaster_19:
+proto 0 0
+intc_0 // 0
+txn GroupIndex
+intc_1 // 1
+-
+frame_bury 0
+frame_dig 0
+gtxns TypeEnum
+intc_1 // pay
+==
+assert
+frame_dig 0
+callsub bootstrap_1
+retsub
+
+// set_bucket_edition_caster
+setbucketeditioncaster_20:
+proto 0 0
+bytec_0 // ""
+txna ApplicationArgs 1
+frame_bury 0
+frame_dig 0
+callsub setbucketedition_8
+retsub
+
+// get_bucket_edition_ids_caster
+getbucketeditionidscaster_21:
+proto 0 0
+bytec_0 // ""
+callsub getbucketeditionids_9
+frame_bury 0
+bytec 11 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// is_active_bucket_edition_caster
+isactivebucketeditioncaster_22:
+proto 0 0
+intc_0 // 0
+dup
+txna ApplicationArgs 1
+btoi
+frame_bury 1
+frame_dig 1
+callsub isactivebucketedition_10
+frame_bury 0
+bytec 11 // 0x151f7c75
+bytec_1 // 0x00
+intc_0 // 0
+frame_dig 0
+setbit
+concat
+log
+retsub
+
+// get_bucket_edition_caster
+getbucketeditioncaster_23:
+proto 0 0
+bytec_0 // ""
+intc_0 // 0
+txna ApplicationArgs 1
+btoi
+frame_bury 1
+frame_dig 1
+callsub getbucketedition_11
+frame_bury 0
+bytec 11 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// disable_bucket_edition_caster
+disablebucketeditioncaster_24:
+proto 0 0
+intc_0 // 0
+txna ApplicationArgs 1
+btoi
+frame_bury 0
+frame_dig 0
+callsub disablebucketedition_12
+retsub
+
+// enable_bucket_edition_caster
+enablebucketeditioncaster_25:
+proto 0 0
+intc_0 // 0
+txna ApplicationArgs 1
+btoi
+frame_bury 0
+frame_dig 0
+callsub enablebucketedition_13
+retsub
+
+// set_bucket_edition_prices_caster
+setbucketeditionpricescaster_26:
+proto 0 0
+intc_0 // 0
+bytec_0 // ""
+txna ApplicationArgs 1
+btoi
+frame_bury 0
+txna ApplicationArgs 2
+frame_bury 1
+frame_dig 0
+frame_dig 1
+callsub setbucketeditionprices_14
+retsub
+
+// get_bucket_edition_prices_caster
+getbucketeditionpricescaster_27:
+proto 0 0
+bytec_0 // ""
+intc_0 // 0
+txna ApplicationArgs 1
+btoi
+frame_bury 1
+frame_dig 1
+callsub getbucketeditionprices_15
+frame_bury 0
+bytec 11 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// mint_caster
+mintcaster_28:
+proto 0 0
+intc_0 // 0
+dupn 2
+bytec_0 // ""
+dup
+txna ApplicationArgs 1
+btoi
+frame_bury 2
+txna ApplicationArgs 2
+frame_bury 3
+txna ApplicationArgs 3
+frame_bury 4
+txn GroupIndex
+intc_1 // 1
+-
+frame_bury 1
+frame_dig 1
+frame_dig 2
+frame_dig 3
+frame_dig 4
+callsub mint_16
+frame_bury 0
+bytec 11 // 0x151f7c75
+frame_dig 0
+itob
+concat
+log
+retsub
+
+// claim_caster
+claimcaster_29:
+proto 0 0
+intc_0 // 0
+txna ApplicationArgs 1
+intc_0 // 0
+getbyte
+frame_bury 0
+frame_dig 0
+callsub claim_17
+retsub
