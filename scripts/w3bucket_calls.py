@@ -144,7 +144,7 @@ class W3Bucket:
                     asset_id,
                 )
             mint_client = client.ApplicationClient(
-                client=localnet.get_algod_client(),
+                client=self.client.client,
                 app=app,
                 sender=mint_acct.address,
                 signer=mint_acct.signer,

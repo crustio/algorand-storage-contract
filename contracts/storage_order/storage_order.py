@@ -266,4 +266,4 @@ def _find_position(address: pt.abi.Address) -> pt.Expr:
 def _address_exist(address: pt.abi.Address) -> pt.Expr:
     return app.state.node_num - _find_position(address)
 
-app.build().export("./artifacts/storage_order")
+app.build().export("../../artifacts/storage_order")

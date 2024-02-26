@@ -594,7 +594,7 @@ def mint(
                             pt.TxnField.asset_amount: exceed.get(),
                             pt.TxnField.asset_receiver: pt.Txn.sender(),
                             pt.TxnField.fee: pt.Int(0),
-                            pt.TxnField.asset_sender: pt.Global.current_application_address(),
+                            pt.TxnField.sender: pt.Global.current_application_address(),
                         }
                     ),
                 )
@@ -666,4 +666,53 @@ def claim(
         ),
     )
 
-app.build().export("./artifacts/w3bucket")
+@app.external(authorize=Authorize.only_creator())
+def retrieve(
+    amount: pt.abi.Uint64
+) -> pt.Expr:
+    return pt.Seq(
+        pt.Assert(
+            pt.Balance(pt.Global.current_application_address()) >= amount.get(),
+            comment="No enough amount to refund"
+        ),
+        pt.InnerTxnBuilder.Execute(
+            {
+                pt.TxnField.type_enum: pt.TxnType.Payment,
+                pt.TxnField.amount: amount.get(),
+                pt.TxnField.receiver: pt.Txn.sender(),
+            }
+        )
+    )
+
+@app.external(authorize=Authorize.only_creator())
+def retrieve_asset(
+    token: pt.abi.Asset,
+    amount: pt.abi.Uint64
+) -> pt.Expr:
+    return pt.Seq(
+        app_bal := token.holding(pt.Global.current_application_address()).balance(),
+        pt.Assert(
+            app_bal.value() >= amount.get(),
+            comment="No enough amount to refund"
+        ),
+        pt.InnerTxnBuilder.Execute(
+            {
+                pt.TxnField.type_enum: pt.TxnType.AssetTransfer,
+                pt.TxnField.xfer_asset: token.asset_id(),
+                pt.TxnField.asset_amount: amount.get(),
+                pt.TxnField.asset_receiver: pt.Txn.sender(),
+                pt.TxnField.sender: pt.Global.current_application_address(),
+                pt.TxnField.fee: pt.Int(1000),
+            }
+        )
+    )
+
+@app.update(authorize=Authorize.only_creator())
+def update() -> pt.Expr:
+    return pt.Approve()
+
+@app.delete(authorize=Authorize.only_creator())
+def delete() -> pt.Expr:
+    return pt.Approve()
+
+app.build().export("../../artifacts/w3bucket")

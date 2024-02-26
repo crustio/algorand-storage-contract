@@ -1,125 +1,93 @@
 #pragma version 8
-intcblock 0 1 16 8 192 1000000
+intcblock 0 1 16 8 192 1000000 1000
 bytecblock 0x 0x00 0x65646974696f6e5f6e756d 0x2465646974696f6e496424 0x2465646974696f6e4964456e6424 0x24626c6f636b4e756d62657224 0x24626c6f636b4e756d626572456e6424 0x2474696d657374616d7024 0x2474696d657374616d70456e6424 0x247472616e73616374696f6e496e64657824 0x247472616e73616374696f6e496e646578456e6424 0x151f7c75 0x65646974696f6e5f696473 0x65646974696f6e5f6d61785f6d696e7461626c655f737570706c79 0x6d61785f65646974696f6e5f6964 0x6d696e5f65646974696f6e5f6964 0x30 0x246361706163697479496e47696761627974657324 0x246361706163697479496e476967616279746573456e6424 0x246576656e744e616d652445646974696f6e41637469766555706461746564246576656e744e616d65456e6424 0x2461637469766524 0x24616374697665456e6424
 txna ApplicationArgs 0
 pushbytes 0x4c5c61ba // "create()void"
 ==
-bnz main_l24
+bnz main_l32
 txna ApplicationArgs 0
 pushbytes 0xa4e8d164 // "bootstrap(pay)void"
 ==
-bnz main_l23
+bnz main_l31
 txna ApplicationArgs 0
 pushbytes 0x6b4fa281 // "set_bucket_edition((uint64,uint64,uint64))void"
 ==
-bnz main_l22
+bnz main_l30
 txna ApplicationArgs 0
 pushbytes 0x0494b207 // "get_bucket_edition_ids()string"
 ==
-bnz main_l21
+bnz main_l29
 txna ApplicationArgs 0
 pushbytes 0xaf53f646 // "is_active_bucket_edition(uint64)bool"
 ==
-bnz main_l20
+bnz main_l28
 txna ApplicationArgs 0
 pushbytes 0xc8ede712 // "get_bucket_edition(uint64)(uint64,bool,uint64,uint64,uint64)"
 ==
-bnz main_l19
+bnz main_l27
 txna ApplicationArgs 0
 pushbytes 0x478799ca // "disable_bucket_edition(uint64)void"
 ==
-bnz main_l18
+bnz main_l26
 txna ApplicationArgs 0
 pushbytes 0x6669dadf // "enable_bucket_edition(uint64)void"
 ==
-bnz main_l17
+bnz main_l25
 txna ApplicationArgs 0
 pushbytes 0xff66364f // "set_bucket_edition_prices(uint64,(uint64,uint64)[])void"
 ==
-bnz main_l16
+bnz main_l24
 txna ApplicationArgs 0
 pushbytes 0x6924c91c // "get_bucket_edition_prices(uint64)(uint64,uint64)[]"
 ==
-bnz main_l15
+bnz main_l23
 txna ApplicationArgs 0
 pushbytes 0x5b3590ad // "mint(txn,uint64,string,string)uint64"
 ==
-bnz main_l14
+bnz main_l22
 txna ApplicationArgs 0
 pushbytes 0xd907a7ea // "claim(asset)void"
 ==
-bnz main_l13
+bnz main_l21
+txna ApplicationArgs 0
+pushbytes 0xbdbb8e77 // "retrieve(uint64)void"
+==
+bnz main_l20
+txna ApplicationArgs 0
+pushbytes 0xa7986925 // "retrieve_asset(asset,uint64)void"
+==
+bnz main_l19
+txna ApplicationArgs 0
+pushbytes 0xa0e81872 // "update()void"
+==
+bnz main_l18
+txna ApplicationArgs 0
+pushbytes 0x24378d3c // "delete()void"
+==
+bnz main_l17
 err
-main_l13:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub claimcaster_29
-intc_1 // 1
-return
-main_l14:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub mintcaster_28
-intc_1 // 1
-return
-main_l15:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub getbucketeditionpricescaster_27
-intc_1 // 1
-return
-main_l16:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub setbucketeditionpricescaster_26
-intc_1 // 1
-return
 main_l17:
 txn OnCompletion
-intc_0 // NoOp
+pushint 5 // DeleteApplication
 ==
 txn ApplicationID
 intc_0 // 0
 !=
 &&
 assert
-callsub enablebucketeditioncaster_25
+callsub deletecaster_37
 intc_1 // 1
 return
 main_l18:
 txn OnCompletion
-intc_0 // NoOp
+pushint 4 // UpdateApplication
 ==
 txn ApplicationID
 intc_0 // 0
 !=
 &&
 assert
-callsub disablebucketeditioncaster_24
+callsub updatecaster_36
 intc_1 // 1
 return
 main_l19:
@@ -131,7 +99,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub getbucketeditioncaster_23
+callsub retrieveassetcaster_35
 intc_1 // 1
 return
 main_l20:
@@ -143,7 +111,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub isactivebucketeditioncaster_22
+callsub retrievecaster_34
 intc_1 // 1
 return
 main_l21:
@@ -155,7 +123,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub getbucketeditionidscaster_21
+callsub claimcaster_33
 intc_1 // 1
 return
 main_l22:
@@ -167,7 +135,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub setbucketeditioncaster_20
+callsub mintcaster_32
 intc_1 // 1
 return
 main_l23:
@@ -179,7 +147,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub bootstrapcaster_19
+callsub getbucketeditionpricescaster_31
 intc_1 // 1
 return
 main_l24:
@@ -188,10 +156,106 @@ intc_0 // NoOp
 ==
 txn ApplicationID
 intc_0 // 0
+!=
+&&
+assert
+callsub setbucketeditionpricescaster_30
+intc_1 // 1
+return
+main_l25:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub enablebucketeditioncaster_29
+intc_1 // 1
+return
+main_l26:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub disablebucketeditioncaster_28
+intc_1 // 1
+return
+main_l27:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub getbucketeditioncaster_27
+intc_1 // 1
+return
+main_l28:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub isactivebucketeditioncaster_26
+intc_1 // 1
+return
+main_l29:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub getbucketeditionidscaster_25
+intc_1 // 1
+return
+main_l30:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub setbucketeditioncaster_24
+intc_1 // 1
+return
+main_l31:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub bootstrapcaster_23
+intc_1 // 1
+return
+main_l32:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
 ==
 &&
 assert
-callsub createcaster_18
+callsub createcaster_22
 intc_1 // 1
 return
 
@@ -1434,7 +1498,7 @@ itxn_field AssetReceiver
 intc_0 // 0
 itxn_field Fee
 global CurrentApplicationAddress
-itxn_field AssetSender
+itxn_field Sender
 itxn_submit
 b mint_16_l5
 mint_16_l3:
@@ -1605,19 +1669,99 @@ txn Sender
 itxn_field AssetReceiver
 global CurrentApplicationAddress
 itxn_field AssetSender
-pushint 1000 // 1000
+intc 6 // 1000
 itxn_field Fee
 itxn_submit
 retsub
 
+// retrieve
+retrieve_18:
+proto 1 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+global CurrentApplicationAddress
+balance
+frame_dig -1
+>=
+// No enough amount to refund
+assert
+itxn_begin
+intc_1 // pay
+itxn_field TypeEnum
+frame_dig -1
+itxn_field Amount
+txn Sender
+itxn_field Receiver
+itxn_submit
+retsub
+
+// retrieve_asset
+retrieveasset_19:
+proto 2 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+global CurrentApplicationAddress
+frame_dig -2
+txnas Assets
+asset_holding_get AssetBalance
+store 45
+frame_dig -1
+>=
+// No enough amount to refund
+assert
+itxn_begin
+pushint 4 // axfer
+itxn_field TypeEnum
+frame_dig -2
+txnas Assets
+itxn_field XferAsset
+frame_dig -1
+itxn_field AssetAmount
+txn Sender
+itxn_field AssetReceiver
+global CurrentApplicationAddress
+itxn_field Sender
+intc 6 // 1000
+itxn_field Fee
+itxn_submit
+retsub
+
+// update
+update_20:
+proto 0 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+intc_1 // 1
+return
+
+// delete
+delete_21:
+proto 0 0
+txn Sender
+global CreatorAddress
+==
+// unauthorized
+assert
+intc_1 // 1
+return
+
 // create_caster
-createcaster_18:
+createcaster_22:
 proto 0 0
 callsub create_0
 retsub
 
 // bootstrap_caster
-bootstrapcaster_19:
+bootstrapcaster_23:
 proto 0 0
 intc_0 // 0
 txn GroupIndex
@@ -1634,7 +1778,7 @@ callsub bootstrap_1
 retsub
 
 // set_bucket_edition_caster
-setbucketeditioncaster_20:
+setbucketeditioncaster_24:
 proto 0 0
 bytec_0 // ""
 txna ApplicationArgs 1
@@ -1644,7 +1788,7 @@ callsub setbucketedition_8
 retsub
 
 // get_bucket_edition_ids_caster
-getbucketeditionidscaster_21:
+getbucketeditionidscaster_25:
 proto 0 0
 bytec_0 // ""
 callsub getbucketeditionids_9
@@ -1656,7 +1800,7 @@ log
 retsub
 
 // is_active_bucket_edition_caster
-isactivebucketeditioncaster_22:
+isactivebucketeditioncaster_26:
 proto 0 0
 intc_0 // 0
 dup
@@ -1676,7 +1820,7 @@ log
 retsub
 
 // get_bucket_edition_caster
-getbucketeditioncaster_23:
+getbucketeditioncaster_27:
 proto 0 0
 bytec_0 // ""
 intc_0 // 0
@@ -1693,7 +1837,7 @@ log
 retsub
 
 // disable_bucket_edition_caster
-disablebucketeditioncaster_24:
+disablebucketeditioncaster_28:
 proto 0 0
 intc_0 // 0
 txna ApplicationArgs 1
@@ -1704,7 +1848,7 @@ callsub disablebucketedition_12
 retsub
 
 // enable_bucket_edition_caster
-enablebucketeditioncaster_25:
+enablebucketeditioncaster_29:
 proto 0 0
 intc_0 // 0
 txna ApplicationArgs 1
@@ -1715,7 +1859,7 @@ callsub enablebucketedition_13
 retsub
 
 // set_bucket_edition_prices_caster
-setbucketeditionpricescaster_26:
+setbucketeditionpricescaster_30:
 proto 0 0
 intc_0 // 0
 bytec_0 // ""
@@ -1730,7 +1874,7 @@ callsub setbucketeditionprices_14
 retsub
 
 // get_bucket_edition_prices_caster
-getbucketeditionpricescaster_27:
+getbucketeditionpricescaster_31:
 proto 0 0
 bytec_0 // ""
 intc_0 // 0
@@ -1747,7 +1891,7 @@ log
 retsub
 
 // mint_caster
-mintcaster_28:
+mintcaster_32:
 proto 0 0
 intc_0 // 0
 dupn 2
@@ -1778,7 +1922,7 @@ log
 retsub
 
 // claim_caster
-claimcaster_29:
+claimcaster_33:
 proto 0 0
 intc_0 // 0
 txna ApplicationArgs 1
@@ -1787,4 +1931,44 @@ getbyte
 frame_bury 0
 frame_dig 0
 callsub claim_17
+retsub
+
+// retrieve_caster
+retrievecaster_34:
+proto 0 0
+intc_0 // 0
+txna ApplicationArgs 1
+btoi
+frame_bury 0
+frame_dig 0
+callsub retrieve_18
+retsub
+
+// retrieve_asset_caster
+retrieveassetcaster_35:
+proto 0 0
+intc_0 // 0
+dup
+txna ApplicationArgs 1
+intc_0 // 0
+getbyte
+frame_bury 0
+txna ApplicationArgs 2
+btoi
+frame_bury 1
+frame_dig 0
+frame_dig 1
+callsub retrieveasset_19
+retsub
+
+// update_caster
+updatecaster_36:
+proto 0 0
+callsub update_20
+retsub
+
+// delete_caster
+deletecaster_37:
+proto 0 0
+callsub delete_21
 retsub

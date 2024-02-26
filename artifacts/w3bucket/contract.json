@@ -150,6 +150,48 @@
             "returns": {
                 "type": "void"
             }
+        },
+        {
+            "name": "retrieve",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "amount"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "retrieve_asset",
+            "args": [
+                {
+                    "type": "asset",
+                    "name": "token"
+                },
+                {
+                    "type": "uint64",
+                    "name": "amount"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "update",
+            "args": [],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "delete",
+            "args": [],
+            "returns": {
+                "type": "void"
+            }
         }
     ],
     "networks": {},
